@@ -34,8 +34,8 @@ export interface Settings {
   repeatMode: 'single' | 'repeat'  // 활성화 모드: 단발 / 반복(뗄 때까지)
   repeatMs: number
   scrollClicks: number
-  scrollMethod: 'auto' | 'post' | 'child' | 'inject'  // 스크롤 방식:
-  // auto=대상 앱별 자동(크롬류→post, 그외→child) / post=top-level PostMessage(크롬 등) / child=자식 컨트롤 PostMessage(메모장 등 클래식) / inject=SendInput 실제 휠(폴백)
+  scrollMethod: 'inject' | 'post' | 'child'  // 스크롤 방식(기본 inject):
+  // inject=SendInput 실제 물리휠(기본 — 부착이 버튼을 대상 창 위에 유지→앱 안 가리고 다 됨) / post=top-level PostMessage(크롬 등) / child=자식 컨트롤 PostMessage(메모장 등 클래식)
   editKey: { x: number; y: number } | null  // 🔑 편집키 위치(null=기본 좌하단)
   editHoldMs: number  // 🔑 편집 진입까지 길게 누름/응시 시간
   attachMode: boolean  // 붙이기: 스크롤 버튼이 대상 창을 자동 추종(창 이동/리사이즈 따라감)
@@ -78,7 +78,7 @@ const DEFAULT_SETTINGS: Settings = {
   repeatMode: 'repeat',
   repeatMs: 250,
   scrollClicks: 3,
-  scrollMethod: 'auto',
+  scrollMethod: 'inject',   // 기본=실제 물리휠(부착이 버튼을 대상 창 위에 유지 → 앱 안 가리고 다 됨). auto/post/child는 폴백으로 선택 가능
   editKey: null,
   editHoldMs: 3000,
   attachMode: false,

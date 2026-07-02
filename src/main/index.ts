@@ -150,12 +150,7 @@ ipcMain.on('scroll', (_e, dir: 'up' | 'down', _sx: number, _sy: number) => {
   //   child = 자식 컨트롤에 WM_MOUSEWHEEL PostMessage (메모장 등 클래식 Win32, 커서 불변)
   //   inject= SendInput 실제 휠 (현재 커서 위치, PostMessage 무시 앱 폴백) — AltController 패턴
   const clicks = settings.scrollClicks  // 스크롤 감도(1회당 휠 노치 수)
-  // auto: 대상 앱별 자동 선택(크롬류 Chromium → post, 그 외 클래식 Win32 → child)
-  let method = settings.scrollMethod
-  if (method === 'auto') {
-    method = lockedTargetClass().startsWith('Chrome_WidgetWin') ? 'post' : 'child'
-  }
-  switch (method) {
+  switch (settings.scrollMethod) {
     case 'child':
       scrollPost(dir, overlayHwndAddr, clicks)
       break

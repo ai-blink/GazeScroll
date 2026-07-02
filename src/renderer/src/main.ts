@@ -52,7 +52,7 @@ interface Settings {
   repeatMode: 'single' | 'repeat'
   repeatMs: number
   scrollClicks: number
-  scrollMethod: 'auto' | 'post' | 'child' | 'inject'
+  scrollMethod: 'inject' | 'post' | 'child'
   editKey: { x: number; y: number } | null
   editHoldMs: number
   attachMode: boolean
@@ -345,6 +345,14 @@ function buildSettingsPanel(): void {
 
     <div class="sp-pane active" data-pane="behavior">
       <div class="sp-grid">
+        <div class="sp-row sp-wide">
+          <label>${L.scrollMethod}</label>
+          <div class="sp-seg" data-group="scrollmethod">
+            <button data-val="inject">${L.methodInject}</button>
+            <button data-val="post">${L.methodPost}</button>
+            <button data-val="child">${L.methodChild}</button>
+          </div>
+        </div>
         <div class="sp-row">
           <label>${L.triggerMode}</label>
           <div class="sp-seg" data-group="trigger">
@@ -378,15 +386,6 @@ function buildSettingsPanel(): void {
           <div class="sp-ctl">
             <input type="range" id="sp-scroll" min="1" max="10" step="1">
             <input type="number" class="sp-num" id="sp-scroll-n" min="1" max="10" step="1">
-          </div>
-        </div>
-        <div class="sp-row sp-wide">
-          <label>${L.scrollMethod}</label>
-          <div class="sp-seg" data-group="scrollmethod">
-            <button data-val="auto">${L.methodAuto}</button>
-            <button data-val="post">${L.methodPost}</button>
-            <button data-val="child">${L.methodChild}</button>
-            <button data-val="inject">${L.methodInject}</button>
           </div>
         </div>
         <div class="sp-row">
@@ -585,7 +584,7 @@ function buildSettingsPanel(): void {
   })
   panelEl.querySelectorAll<HTMLElement>('.sp-seg[data-group="scrollmethod"] button').forEach((b) => {
     b.addEventListener('click', () => {
-      s.scrollMethod = (b.dataset.val as 'auto' | 'post' | 'child' | 'inject')
+      s.scrollMethod = (b.dataset.val as 'inject' | 'post' | 'child')
       syncMode(); persist()
     })
   })

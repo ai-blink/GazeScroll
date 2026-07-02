@@ -31,7 +31,6 @@ export interface Strings {
   repeatInterval: string
   scrollSensitivity: string
   scrollMethod: string
-  methodAuto: string
   methodPost: string
   methodChild: string
   methodInject: string
@@ -103,10 +102,9 @@ const ko: Strings = {
   repeatInterval: '반복 간격 (ms)',
   scrollSensitivity: '스크롤 감도 (휠 노치)',
   scrollMethod: '스크롤 방식',
-  methodAuto: '자동',
   methodPost: '크롬형',
   methodChild: '클래식',
-  methodInject: '실휠',
+  methodInject: '실제 물리휠',
   editKeyTime: '풀리는 시간 (ms)',
   btnSize: '버튼 크기 (px)',
   btnShape: '버튼 모양',
@@ -169,7 +167,6 @@ const en: Strings = {
   repeatInterval: 'Repeat interval (ms)',
   scrollSensitivity: 'Scroll amount (notches)',
   scrollMethod: 'Scroll method',
-  methodAuto: 'Auto',
   methodPost: 'Chrome',
   methodChild: 'Classic',
   methodInject: 'Real wheel',
@@ -235,7 +232,6 @@ const ja: Strings = {
   repeatInterval: '繰り返し間隔 (ms)',
   scrollSensitivity: 'スクロール量 (ノッチ)',
   scrollMethod: 'スクロール方式',
-  methodAuto: '自動',
   methodPost: 'Chrome系',
   methodChild: 'クラシック',
   methodInject: '実ホイール',
@@ -301,7 +297,6 @@ const zhCN: Strings = {
   repeatInterval: '重复间隔 (ms)',
   scrollSensitivity: '滚动量 (齿格)',
   scrollMethod: '滚动方式',
-  methodAuto: '自动',
   methodPost: 'Chrome型',
   methodChild: '经典',
   methodInject: '真实滚轮',
@@ -367,7 +362,6 @@ const zhTW: Strings = {
   repeatInterval: '重複間隔 (ms)',
   scrollSensitivity: '捲動量 (刻痕)',
   scrollMethod: '捲動方式',
-  methodAuto: '自動',
   methodPost: 'Chrome型',
   methodChild: '經典',
   methodInject: '真實滾輪',
@@ -433,7 +427,6 @@ const hi: Strings = {
   repeatInterval: 'दोहराव अंतराल (ms)',
   scrollSensitivity: 'स्क्रॉल मात्रा (नॉच)',
   scrollMethod: 'स्क्रॉल तरीका',
-  methodAuto: 'स्वतः',
   methodPost: 'Chrome शैली',
   methodChild: 'क्लासिक',
   methodInject: 'असली व्हील',
@@ -499,7 +492,6 @@ const es: Strings = {
   repeatInterval: 'Intervalo de repetición (ms)',
   scrollSensitivity: 'Cantidad de scroll (muescas)',
   scrollMethod: 'Método de scroll',
-  methodAuto: 'Auto',
   methodPost: 'Chrome',
   methodChild: 'Clásico',
   methodInject: 'Rueda real',
