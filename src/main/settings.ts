@@ -1,6 +1,7 @@
 import { app } from 'electron'
 import { join } from 'path'
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
+import type { Lang } from '../shared/i18n'
 
 export interface ButtonConfig {
   id: string
@@ -42,6 +43,7 @@ export interface Settings {
   attachAllow: string[]  // 붙일 창 허용 목록(exe명, 소문자). 비어 있으면 전체 허용(기본)
   globalHotkey: string
   showOverlay: boolean
+  lang: Lang  // UI 언어(ko/en/ja/zh-CN/zh-TW/hi/es). 기본 ko.
 }
 
 function computeDefaultButtons(screenWidth: number, screenHeight: number): ButtonConfig[] {
@@ -83,7 +85,8 @@ const DEFAULT_SETTINGS: Settings = {
   attachAnchor: 'r',
   attachAllow: [],
   globalHotkey: 'Alt+F12',
-  showOverlay: true
+  showOverlay: true,
+  lang: 'ko'
 }
 
 function getSettingsPath(): string {

@@ -87,9 +87,12 @@ html, body {
   transition: height var(--dwell-ms) linear;
 }
 
-/* ── 원형 게이지 (gaugeStyle='circular') ──────────────────────────────
-   버튼 전체에 conic-gradient 링을 얹고, dwell 진행에 따라 각도를 0→360° 스윕.
-   가운데는 mask로 뚫어 글리프가 보이게 한다(도넛). @property로 각도 transition. */
+/* ── 링 게이지 (gaugeStyle='circular') ──────────────────────────────
+   conic-gradient를 dwell 진행에 따라 0→360° 스윕해 링(도넛)으로 채운다. @property로 각도 transition.
+   링이 버튼 모양을 따라가야 자연스럽다:
+   - 원형 버튼(shape-circle): radial mask로 완벽한 원형 도넛(안쪽도 원).
+   - 둥근/각진 버튼: padding + mask-composite로 균일 링 밴드 → 부모 overflow:hidden+border-radius가
+     바깥 모서리를 버튼 곡률로 클립 → rounded-rect / 각진 링. */
 @property --dwell-angle {
   syntax: '<angle>';
   inherits: false;
@@ -98,10 +101,22 @@ html, body {
 body.gauge-circular .rbtn .fill {
   inset: 0;
   height: auto;
+  border-radius: inherit;
   background: conic-gradient(var(--gauge) var(--dwell-angle), transparent 0deg);
+  padding: calc(var(--btn-size, 60px) * 0.15);   /* 링 두께 */
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask-composite: exclude;
+  opacity: .9;
+}
+/* 원형 버튼: 완벽한 원형 도넛(안쪽 구멍도 원형) */
+body.gauge-circular.shape-circle .rbtn .fill {
+  padding: 0;
   -webkit-mask: radial-gradient(circle, transparent 56%, #000 58%);
           mask: radial-gradient(circle, transparent 56%, #000 58%);
-  opacity: .9;
+  -webkit-mask-composite: source-over;
+          mask-composite: add;
 }
 body.gauge-circular .rbtn.dwell-active .fill {
   height: auto;
@@ -127,7 +142,7 @@ body.gauge-fill-lr .rbtn.dwell-active .fill {
 body.gauge-expand .rbtn .fill {
   inset: 0; height: auto;
   background: var(--gauge);
-  border-radius: 50%;
+  border-radius: inherit;   /* 버튼 모양(원/둥근/각) 따라 확산 — 각진 버튼에서 동그란 blob 어색함 방지 */
   transform: scale(0);
   opacity: .9;
 }
@@ -301,6 +316,16 @@ body.edit .rbtn.edit-key { cursor: move; }
   font-weight: 700;
 }
 
+/* 언어 선택 세그먼트: 7개 언어라 한 줄에 안 맞으면 줄바꿈(고정 flex:1 대신 내용 폭) */
+#settings-panel .sp-lang {
+  flex-wrap: wrap;
+}
+#settings-panel .sp-lang button {
+  flex: 0 0 auto;
+  min-width: 52px;
+  padding: 5px 8px;
+}
+
 /* 붙는 위치 3x3 앵커 선택 */
 #settings-panel .sp-anchor {
   display: grid;
@@ -440,6 +465,85 @@ body.edit .rbtn.edit-key { cursor: move; }
   font-size: 11px;
   color: #64748b;
 }
+
+/* 정보(About) 모달 — #settings-panel의 자식(edit-mode 클릭 판정 포함)이지만 backdrop 없음.
+   화면을 어둡게/가로채지 않도록 컨테이너는 0크기, 카드(am-box)만 fixed로 화면 중앙에 띄운다.
+   닫기 = ✕ / 확인 (배경 클릭 닫기 없음 — 배경을 가리지 않기 위해). */
+#about-modal .am-box {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  width: 370px;
+  max-width: 92vw;
+  padding: 16px 18px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.7);
+  color: #e2e8f0;
+  text-align: left;
+}
+#about-modal .am-title {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fbbf24;
+  margin-bottom: 10px;
+}
+#about-modal .am-x {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+}
+#about-modal .am-x:hover { color: #e2e8f0; }
+#about-modal .am-desc {
+  font-size: 12px;
+  line-height: 1.55;
+  color: #cbd5e1;
+  margin-bottom: 12px;
+}
+#about-modal .am-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+#about-modal .am-row { display: flex; gap: 8px; }
+#about-modal .am-k { flex: 0 0 auto; width: 72px; color: #94a3b8; }
+#about-modal .am-link {
+  color: #7dd3fc;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: text;
+  overflow-wrap: anywhere;
+}
+#about-modal .am-link:hover { text-decoration: underline; }
+#about-modal .am-copy { font-size: 11px; color: #64748b; }
+#about-modal .am-license {
+  font-size: 10px;
+  line-height: 1.4;
+  color: #64748b;
+  margin: 4px 0 14px;
+}
+#about-modal .am-ok {
+  width: 100%;
+  padding: 8px;
+  background: #0ea5e9;
+  color: #04293a;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+}
+#about-modal .am-ok:hover { background: #38bdf8; }
 #settings-panel .sp-refresh {
   width: 100%;
   margin-top: 6px;

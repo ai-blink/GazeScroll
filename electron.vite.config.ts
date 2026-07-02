@@ -18,6 +18,12 @@ export default defineConfig({
       alias: {
         '@renderer': resolve('src/renderer/src')
       }
+    },
+    // renderer 루트(src/renderer) 밖의 공용 모듈(src/shared/i18n) import 허용
+    server: {
+      fs: {
+        allow: [resolve('.')]
+      }
     }
   }
 })

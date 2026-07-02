@@ -1,4 +1,5 @@
 import './style.css'
+import { t, LANGS, type Lang } from '../../shared/i18n'
 
 declare global {
   interface Window {
@@ -57,6 +58,7 @@ interface Settings {
   attachMode: boolean
   attachAnchor: 'tl' | 't' | 'tr' | 'l' | 'r' | 'bl' | 'b' | 'br'
   attachAllow: string[]
+  lang: Lang
 }
 
 const overlayEl = document.getElementById('overlay')!
@@ -301,10 +303,14 @@ function createButton(cfg: ButtonConfig): HTMLElement {
     user-select: none;
     z-index: 10;
   `
+  // 서브라벨: 스크롤 버튼은 현재 언어로, 그 외(커스텀 키)는 저장된 label 사용
+  const L = settings ? t(settings.lang) : t('ko')
+  const subLabel = cfg.action === 'scroll-up' ? L.scrollUp
+    : cfg.action === 'scroll-down' ? L.scrollDown : cfg.label
   el.innerHTML = `
     <span class="fill"></span>
     <span class="glyph">${cfg.glyph}</span>
-    <span class="sub-label">${cfg.label}</span>
+    <span class="sub-label">${subLabel}</span>
   `
 
   setupDrag(cfg, el)
@@ -324,64 +330,67 @@ function persist(): void {
 function buildSettingsPanel(): void {
   if (panelEl || !settings) return
   const s = settings
+  const L = t(s.lang)  // 현재 언어 문자열 세트. 언어 변경 시 패널을 재생성해 재번역한다.
+  const langSeg = LANGS.map((l) =>
+    `<button data-val="${l.code}"${l.code === s.lang ? ' class="active"' : ''}>${l.label}</button>`).join('')
   panelEl = document.createElement('div')
   panelEl.id = 'settings-panel'
   panelEl.innerHTML = `
-    <div class="sp-title">⚙ 설정</div>
+    <div class="sp-title">⚙ ${L.settingsTitle}</div>
     <div class="sp-tabs">
-      <button class="sp-tab active" data-tab="behavior">동작</button>
-      <button class="sp-tab" data-tab="style">모양</button>
-      <button class="sp-tab" data-tab="attach">붙일 창</button>
+      <button class="sp-tab active" data-tab="behavior">${L.tabBehavior}</button>
+      <button class="sp-tab" data-tab="style">${L.tabStyle}</button>
+      <button class="sp-tab" data-tab="attach">${L.tabAttach}</button>
     </div>
 
     <div class="sp-pane active" data-pane="behavior">
       <div class="sp-grid">
         <div class="sp-row">
-          <label>작동 방식</label>
+          <label>${L.triggerMode}</label>
           <div class="sp-seg" data-group="trigger">
-            <button data-val="dwell">드웰</button>
-            <button data-val="click">클릭</button>
+            <button data-val="dwell">${L.dwell}</button>
+            <button data-val="click">${L.click}</button>
           </div>
         </div>
         <div class="sp-row">
-          <label>활성화 모드</label>
+          <label>${L.activateMode}</label>
           <div class="sp-seg" data-group="repeat">
-            <button data-val="single">단발</button>
-            <button data-val="repeat">반복</button>
+            <button data-val="single">${L.single}</button>
+            <button data-val="repeat">${L.repeat}</button>
           </div>
         </div>
         <div class="sp-row">
-          <label>드웰 시간 (ms)</label>
+          <label>${L.dwellTime}</label>
           <div class="sp-ctl">
             <input type="range" id="sp-dwell" min="200" max="2000" step="50">
             <input type="number" class="sp-num" id="sp-dwell-n" min="200" max="2000" step="50">
           </div>
         </div>
         <div class="sp-row">
-          <label>반복 간격 (ms)</label>
+          <label>${L.repeatInterval}</label>
           <div class="sp-ctl">
             <input type="range" id="sp-repeat" min="80" max="800" step="10">
             <input type="number" class="sp-num" id="sp-repeat-n" min="80" max="800" step="10">
           </div>
         </div>
         <div class="sp-row">
-          <label>스크롤 감도 (휠 노치)</label>
+          <label>${L.scrollSensitivity}</label>
           <div class="sp-ctl">
             <input type="range" id="sp-scroll" min="1" max="10" step="1">
             <input type="number" class="sp-num" id="sp-scroll-n" min="1" max="10" step="1">
           </div>
         </div>
         <div class="sp-row sp-wide">
-          <label>스크롤 방식</label>
+          <label>${L.scrollMethod}</label>
           <div class="sp-seg" data-group="scrollmethod">
-            <button data-val="auto">자동</button>
-            <button data-val="post">크롬형</button>
-            <button data-val="child">클래식</button>
-            <button data-val="inject">실휠</button>
+            <button data-val="auto">${L.methodAuto}</button>
+            <button data-val="post">${L.methodPost}</button>
+            <button data-val="child">${L.methodChild}</button>
+            <button data-val="inject">${L.methodInject}</button>
           </div>
         </div>
         <div class="sp-row">
-          <label>🔑 풀리는 시간 (ms)</label>
+          <label>🔑 ${L.editKeyTime}</label>
           <div class="sp-ctl">
             <input type="range" id="sp-edit" min="1000" max="6000" step="250">
             <input type="number" class="sp-num" id="sp-edit-n" min="1000" max="6000" step="250">
@@ -392,55 +401,59 @@ function buildSettingsPanel(): void {
 
     <div class="sp-pane" data-pane="style">
       <div class="sp-grid">
+        <div class="sp-row sp-wide">
+          <label>${L.language}</label>
+          <div class="sp-seg sp-lang" data-group="lang">${langSeg}</div>
+        </div>
         <div class="sp-row">
-          <label>버튼 크기 (px)</label>
+          <label>${L.btnSize}</label>
           <div class="sp-ctl">
             <input type="range" id="sp-size" min="30" max="120" step="5">
             <input type="number" class="sp-num" id="sp-size-n" min="30" max="120" step="5">
           </div>
         </div>
         <div class="sp-row">
-          <label>버튼 모양</label>
+          <label>${L.btnShape}</label>
           <div class="sp-seg" data-group="shape">
-            <button data-val="50%">원형</button>
-            <button data-val="16px">둥근</button>
-            <button data-val="6px">각짐</button>
+            <button data-val="50%">${L.shapeRound}</button>
+            <button data-val="16px">${L.shapeRounded}</button>
+            <button data-val="6px">${L.shapeSquare}</button>
           </div>
         </div>
         <div class="sp-row sp-wide">
-          <label>드웰 게이지 형태</label>
+          <label>${L.gaugeStyle}</label>
           <div class="sp-seg" data-group="gauge">
-            <button data-val="fill">채움↑</button>
-            <button data-val="fill-lr">채움→</button>
-            <button data-val="circular">원형</button>
-            <button data-val="expand">확산</button>
+            <button data-val="fill">${L.gaugeFill}</button>
+            <button data-val="fill-lr">${L.gaugeFillLr}</button>
+            <button data-val="circular">${L.gaugeCircular}</button>
+            <button data-val="expand">${L.gaugeExpand}</button>
           </div>
         </div>
         <div class="sp-row">
-          <label>버튼 배경색</label>
+          <label>${L.btnBg}</label>
           <div class="sp-palette" data-prop="btnBg"></div>
         </div>
         <div class="sp-row">
-          <label>게이지 색</label>
+          <label>${L.gaugeColor}</label>
           <div class="sp-palette" data-prop="gaugeColor"></div>
         </div>
         <div class="sp-row">
-          <label>텍스트 색</label>
+          <label>${L.btnFg}</label>
           <div class="sp-palette" data-prop="btnFg"></div>
         </div>
         <div class="sp-row">
-          <label>테두리 색</label>
+          <label>${L.borderColor}</label>
           <div class="sp-palette" data-prop="borderColor"></div>
         </div>
         <div class="sp-row">
-          <label>테두리 굵기 (px)</label>
+          <label>${L.borderWidth}</label>
           <div class="sp-ctl">
             <input type="range" id="sp-border" min="0" max="6" step="1">
             <input type="number" class="sp-num" id="sp-border-n" min="0" max="6" step="1">
           </div>
         </div>
         <div class="sp-row">
-          <label>투명도</label>
+          <label>${L.opacity}</label>
           <div class="sp-ctl">
             <input type="range" id="sp-op" min="0.2" max="1" step="0.05">
             <input type="number" class="sp-num" id="sp-op-n" min="0.2" max="1" step="0.05">
@@ -452,14 +465,14 @@ function buildSettingsPanel(): void {
     <div class="sp-pane" data-pane="attach">
       <div class="sp-grid">
         <div class="sp-row sp-wide">
-          <label>창에 붙이기 (자동 추종)</label>
+          <label>${L.attachToggle}</label>
           <div class="sp-seg" data-group="attach">
-            <button data-val="off">끄기</button>
-            <button data-val="on">켜기</button>
+            <button data-val="off">${L.off}</button>
+            <button data-val="on">${L.on}</button>
           </div>
         </div>
         <div class="sp-row sp-wide">
-          <label>붙는 위치 (대상 창 기준)</label>
+          <label>${L.attachAnchor}</label>
           <div class="sp-anchor" data-group="anchor">
             <button data-val="tl">↖</button><button data-val="t">↑</button><button data-val="tr">↗</button>
             <button data-val="l">←</button><button class="mid" disabled>·</button><button data-val="r">→</button>
@@ -467,20 +480,20 @@ function buildSettingsPanel(): void {
           </div>
         </div>
         <div class="sp-row sp-wide">
-          <label>붙일 창 허용 목록 <span class="sp-hint">(비우면 전체 허용)</span></label>
+          <label>${L.attachAllow} <span class="sp-hint">${L.attachAllowHint}</span></label>
           <div class="sp-winlist" id="sp-winlist"></div>
-          <button class="sp-refresh" id="sp-winrefresh">↻ 목록 새로고침</button>
+          <button class="sp-refresh" id="sp-winrefresh">↻ ${L.winRefresh}</button>
         </div>
       </div>
     </div>
 
-    <button class="sp-done">편집 완료</button>
+    <button class="sp-done">${L.done}</button>
     <div class="sp-about">
       <div class="sp-about-row">
         <span id="sp-ver">GazeScroll</span>
-        <button class="sp-contact" id="sp-contact">✉ 문의</button>
+        <button class="sp-contact" id="sp-contact">✉ ${L.contact}</button>
       </div>
-      <div class="sp-copyright">MIT © 2026 BlinkLabs</div>
+      <div class="sp-copyright">© 2026 BlinkLabs · MIT</div>
     </div>
   `
   document.body.appendChild(panelEl)
@@ -489,9 +502,37 @@ function buildSettingsPanel(): void {
     const ver = panelEl!.querySelector('#sp-ver')
     if (ver) ver.textContent = `GazeScroll v${v}`
   })
-  // 문의 버튼: 기본 메일 앱으로 tia_access@naver.com 작성 창 열기(main의 shell.openExternal).
-  panelEl.querySelector('#sp-contact')?.addEventListener('click', () => {
-    window.api.openExternal(`mailto:tia_access@naver.com?subject=${encodeURIComponent('GazeScroll 문의')}`)
+  // 문의 버튼 → 정보(About) 모달. 모달을 #settings-panel의 자식으로 붙여 edit-mode 커서 판정
+  // selector('#settings-panel')에 포함시킨다(그래야 클릭 가능). 네이티브 alert 아님 — DOM 모달.
+  const modal = document.createElement('div')
+  modal.id = 'about-modal'
+  modal.style.display = 'none'
+  modal.innerHTML = `
+    <div class="am-box">
+      <div class="am-title"><span id="am-appver">GazeScroll</span>&nbsp;·&nbsp;${L.about}<button class="am-x" id="am-x" title="${L.close}">✕</button></div>
+      <div class="am-desc">${L.appDesc}</div>
+      <div class="am-rows">
+        <div class="am-row"><span class="am-k">${L.homepage}</span><a class="am-link" id="am-home" href="#">github.com/ai-blink/GazeScroll</a></div>
+        <div class="am-row"><span class="am-k">${L.email}</span><a class="am-link" id="am-mail" href="#">tia_access@naver.com</a></div>
+        <div class="am-row"><span class="am-k">${L.maker}</span><span>BlinkLabs</span></div>
+      </div>
+      <div class="am-copy">© 2026 BlinkLabs · MIT License</div>
+      <div class="am-license">${L.licenseNote}</div>
+      <button class="am-ok" id="am-ok">${L.close}</button>
+    </div>
+  `
+  panelEl.appendChild(modal)
+  const amVer = modal.querySelector('#am-appver')
+  if (amVer) window.api.getVersion().then((v) => { amVer.textContent = `GazeScroll v${v}` })
+  const showAbout = (show: boolean): void => { modal.style.display = show ? 'block' : 'none' }
+  panelEl.querySelector('#sp-contact')?.addEventListener('click', () => showAbout(true))
+  modal.querySelector('#am-ok')?.addEventListener('click', () => showAbout(false))
+  modal.querySelector('#am-x')?.addEventListener('click', () => showAbout(false))
+  modal.querySelector('#am-home')?.addEventListener('click', (e) => {
+    e.preventDefault(); window.api.openExternal('https://github.com/ai-blink/GazeScroll')
+  })
+  modal.querySelector('#am-mail')?.addEventListener('click', (e) => {
+    e.preventDefault(); window.api.openExternal(`mailto:tia_access@naver.com?subject=${encodeURIComponent(L.contactSubject)}`)
   })
 
   const $ = (sel: string): HTMLElement => panelEl!.querySelector(sel) as HTMLElement
@@ -573,26 +614,30 @@ function buildSettingsPanel(): void {
       applySettings(s); syncMode(); persist()
     })
   })
+  // 언어 선택: 클릭 즉시 저장 + 패널 재생성으로 재번역(모든 라벨을 새 언어로).
+  panelEl.querySelectorAll<HTMLElement>('.sp-seg[data-group="lang"] button').forEach((b) => {
+    b.addEventListener('click', () => setLanguage(b.dataset.val as Lang))
+  })
 
   // 붙일 창 허용 목록: 현재 창 목록을 체크리스트로 보여주고, 체크된 exe만 attachAllow에 저장.
   // 목록이 비면 전체 허용(기존 동작). 창 제목은 textContent로 넣어 HTML 주입 방지.
   const winlist = $('#sp-winlist')
   const renderWinlist = async (): Promise<void> => {
-    winlist.textContent = '불러오는 중…'
+    winlist.textContent = L.winLoading
     let live: Array<{ title: string; className: string; exe: string }> = []
     try { live = await window.api.listWindows() } catch { live = [] }
     // 허용됐지만 지금 실행 중이 아닌 exe도 표시해 체크 해제 가능하게 한다.
     const liveExes = new Set(live.map((w) => w.exe))
-    const extra = s.attachAllow.filter((e) => !liveExes.has(e)).map((e) => ({ title: '(실행 중 아님)', className: '', exe: e }))
+    const extra = s.attachAllow.filter((e) => !liveExes.has(e)).map((e) => ({ title: L.winNotRunning, className: '', exe: e }))
     const items = [...live, ...extra]
     winlist.textContent = ''
-    if (!items.length) { winlist.textContent = '창을 찾지 못했습니다'; return }
+    if (!items.length) { winlist.textContent = L.winEmpty; return }
     // 네이티브 <table> — 브라우저가 열을 자동 정렬(table-layout:fixed로 폭 고정).
     const table = document.createElement('table')
     table.className = 'sp-wintable'
     const thead = document.createElement('thead')
     const htr = document.createElement('tr')
-    ;['✓', '앱', '창 제목'].forEach((label) => {
+    ;['✓', L.winColApp, L.winColTitle].forEach((label) => {
       const th = document.createElement('th')
       th.textContent = label
       htr.appendChild(th)
@@ -713,6 +758,37 @@ function showSettingsPanel(show: boolean): void {
   if (panelEl) panelEl.style.display = show ? 'block' : 'none'
 }
 
+// 스크롤 버튼의 서브라벨(스크롤↑/↓)을 현재 언어로 갱신. 커스텀 키 버튼은 저장된 label 유지.
+// (🔑·⏻ 버튼은 sub-label span이 없어 자동 skip)
+function applyButtonLabels(): void {
+  if (!settings) return
+  const L = t(settings.lang)
+  for (const { el, cfg } of buttons.values()) {
+    const sub = el.querySelector('.sub-label')
+    if (!sub) continue
+    sub.textContent = cfg.action === 'scroll-up' ? L.scrollUp
+      : cfg.action === 'scroll-down' ? L.scrollDown : cfg.label
+  }
+}
+
+// 언어 변경: 저장 + 버튼 라벨 갱신 + 패널을 재생성해 전체 재번역. 선택 UI가 [모양] 탭에
+// 있으므로 재생성 후 그 탭을 활성화해 사용자가 방금 고른 위치를 유지한다.
+function setLanguage(lang: Lang): void {
+  if (!settings || settings.lang === lang) return
+  settings.lang = lang
+  document.documentElement.lang = lang
+  applyButtonLabels()
+  persist()
+  if (panelEl) { panelEl.remove(); panelEl = null }
+  buildSettingsPanel()  // panelEl을 새로 할당(TS는 이 재할당을 추적 못 해 아래에서 캐스트)
+  const p = panelEl as HTMLElement | null
+  if (p) {
+    p.style.display = 'block'
+    const styleTab = p.querySelector('.sp-tab[data-tab="style"]') as HTMLElement | null
+    styleTab?.click()
+  }
+}
+
 // 편집모드 적용 공통 경로 — Alt+E(main) / 🔑 길게응시 / 패널 '편집 완료' 모두 여기로.
 function applyEditMode(enabled: boolean): void {
   if (editMode === enabled) return
@@ -735,6 +811,7 @@ window.api.onSetEditMode((enabled: boolean) => applyEditMode(enabled))
 
 function applySettings(s: Settings): void {
   const root = document.documentElement
+  root.lang = s.lang  // <html lang> 갱신(접근성·폰트 힌트)
   // 모든 CSS 변수 강제 설정 (CSS 파일 로드 실패 시도 보장). 색·테두리는 사용자 설정값.
   root.style.setProperty('--btn-bg', s.btnBg)
   root.style.setProperty('--btn-fg', s.btnFg)
@@ -751,6 +828,9 @@ function applySettings(s: Settings): void {
   // 게이지 스타일별 body 클래스 부여(style.css의 gauge-* 규칙 적용). 기존 클래스는 모두 제거 후 현재 것만.
   document.body.classList.remove('gauge-fill', 'gauge-fill-lr', 'gauge-circular', 'gauge-expand')
   document.body.classList.add('gauge-' + s.gaugeStyle)
+  // 버튼 모양 클래스 — circular 게이지가 모양(원형/둥근/각진)에 맞춰 도넛/링을 고르게 한다
+  document.body.classList.remove('shape-circle', 'shape-rounded', 'shape-square')
+  document.body.classList.add(s.btnRadius === '50%' ? 'shape-circle' : s.btnRadius === '6px' ? 'shape-square' : 'shape-rounded')
 }
 
 // 🔑 편집키 버튼: 오버레이 우상단 고정. 일반 모드에서 3초 응시 시 편집모드 진입.
@@ -854,7 +934,7 @@ function createQuitKey(): void {
     <span class="fill"></span>
     <span class="glyph">⏻</span>
   `
-  const cfg: ButtonConfig = { id: QUIT_KEY_ID, glyph: '⏻', label: '종료', x: 0, y: 0, action: 'quit' }
+  const cfg: ButtonConfig = { id: QUIT_KEY_ID, glyph: '⏻', label: t(settings?.lang ?? 'ko').trayQuit, x: 0, y: 0, action: 'quit' }
   overlayEl.appendChild(el)
   buttons.set(QUIT_KEY_ID, { el, cfg })
 }

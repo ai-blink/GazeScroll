@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage, globalShortcut, s
 import { join } from 'path'
 import { scrollPost, scrollPostTop, scrollInject, refreshScrollTarget, lockedTargetClass, getTargetRect, getCursorScreenPos, keyPress, isLeftMouseDown, foregroundExe, listWindows } from './input'
 import { loadSettings, saveSettings, Settings } from './settings'
+import { t } from '../shared/i18n'
 
 let overlay: BrowserWindow | null = null
 let tray: Tray | null = null
@@ -115,13 +116,20 @@ function createTray(): void {
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAAI0lEQVQ4jWNgYGD4z8BAAIwEgGkGhv//GUY1jGqgTAMAAFsBBv6FVDsAAAAASUVORK5CYII='
   )
   tray = new Tray(icon16)
-  const menu = Menu.buildFromTemplate([
-    { label: '토글 표시/숨김', click: () => toggleOverlay() },
-    { label: '종료', click: () => { app.quit() } }
-  ])
-  tray.setToolTip('GazeScroll — 전역 스크롤 리모컨')
-  tray.setContextMenu(menu)
   tray.on('click', () => toggleOverlay())
+  applyTrayLang()
+}
+
+// 트레이 메뉴·툴팁을 현재 settings.lang로 (재)구성. 언어 변경(save-settings) 시에도 호출해 즉시 반영.
+function applyTrayLang(): void {
+  if (!tray) return
+  const L = t(settings.lang)
+  const menu = Menu.buildFromTemplate([
+    { label: L.trayToggle, click: () => toggleOverlay() },
+    { label: L.trayQuit, click: () => { app.quit() } }
+  ])
+  tray.setToolTip(L.trayTooltip)
+  tray.setContextMenu(menu)
 }
 
 function toggleOverlay(): void {
@@ -184,6 +192,7 @@ ipcMain.handle('list-windows', () => listWindows())
 ipcMain.on('save-settings', (_e, newSettings: Partial<Settings>) => {
   settings = { ...settings, ...newSettings }
   saveSettings(settings)
+  applyTrayLang()  // 언어가 바뀌었을 수 있으니 트레이도 갱신(값 동일하면 무해)
 })
 
 ipcMain.on('toggle-overlay', () => toggleOverlay())
