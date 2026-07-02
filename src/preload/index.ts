@@ -38,8 +38,8 @@ contextBridge.exposeInMainWorld('api', {
   onSetEditMode: (callback: (enabled: boolean) => void) =>
     ipcRenderer.on('set-edit-mode', (_e, enabled) => callback(enabled)),
 
-  onCursor: (callback: (x: number, y: number, pressed: boolean, targetIsChrome: boolean) => void) =>
-    ipcRenderer.on('cursor', (_e, x, y, pressed, targetIsChrome) => callback(x, y, pressed, targetIsChrome)),
+  onCursor: (callback: (x: number, y: number, pressed: boolean) => void) =>
+    ipcRenderer.on('cursor', (_e, x, y, pressed) => callback(x, y, pressed)),
 
   // 붙이기 모드: 대상 창 사각형(오버레이 기준 CSS px)
   onTargetRect: (callback: (x: number, y: number, w: number, h: number) => void) =>

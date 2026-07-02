@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage, globalShortcut, screen, shell } from 'electron'
 import { join } from 'path'
-import { scrollPost, scrollPostTop, scrollInject, refreshScrollTarget, lockedTargetClass, getTargetRect, getCursorScreenPos, keyPress, isLeftMouseDown, foregroundExe, listWindows } from './input'
+import { scrollPost, scrollPostTop, scrollInject, refreshScrollTarget, getTargetRect, getCursorScreenPos, keyPress, isLeftMouseDown, foregroundExe, listWindows } from './input'
 import { loadSettings, saveSettings, Settings } from './settings'
 import { t } from '../shared/i18n'
 
@@ -93,9 +93,7 @@ function startCursorPolling(): void {
     // 물리 픽셀 → DIP(CSS px), 그리고 오버레이 창 기준 좌표로 변환
     const dip = screen.screenToDipPoint({ x: p.x, y: p.y })
     const b = overlay.getBounds()
-    // 크롬(Chromium)은 흡수 중 합성 휠을 거부 → renderer가 크롬 대상일 때만 흡수를 끄도록 플래그 전달
-    const targetIsChrome = lockedTargetClass().startsWith('Chrome_WidgetWin')
-    overlay.webContents.send('cursor', Math.round(dip.x - b.x), Math.round(dip.y - b.y), pressed, targetIsChrome)
+    overlay.webContents.send('cursor', Math.round(dip.x - b.x), Math.round(dip.y - b.y), pressed)
 
     // 붙이기 모드: 대상 창 사각형을 오버레이 기준 CSS px로 변환해 전송 → renderer가 리모컨을 그 위에 앵커.
     if (settings.attachMode) {

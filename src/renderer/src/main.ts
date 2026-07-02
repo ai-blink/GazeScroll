@@ -16,7 +16,7 @@ declare global {
       toggleOverlay: () => void
       setEditMode: (enabled: boolean) => void
       onSetEditMode: (callback: (enabled: boolean) => void) => void
-      onCursor: (callback: (x: number, y: number, pressed: boolean, targetIsChrome: boolean) => void) => void
+      onCursor: (callback: (x: number, y: number, pressed: boolean) => void) => void
       onTargetRect: (callback: (x: number, y: number, w: number, h: number) => void) => void
       quit: () => void
     }
@@ -98,7 +98,7 @@ function updateHover(clientX: number, clientY: number): void {
 //  - 드웰모드: 항상 클릭스루 유지하고 gaze로 dwell 판정.
 let dragActive = false
 let editKeyCharging = false
-window.api.onCursor((x, y, pressed, targetIsChrome) => {
+window.api.onCursor((x, y, pressed) => {
   if (editMode) {
     // 편집모드만 오버레이를 인터랙티브로(패널·드래그 실제 클릭). 빈 곳은 통과, 드래그 중 고정.
     if (!dragActive) {
@@ -115,19 +115,17 @@ window.api.onCursor((x, y, pressed, targetIsChrome) => {
   else if (!charging && editKeyCharging) { editKeyCharging = false; leaveEditCharge() }
 
   if (settings?.triggerMode === 'click') {
-    // 버튼 위면 클릭스루를 꺼 클릭을 흡수(뒤로 안 뚫림), 빈 곳은 통과 → 메모장·도스·카톡 등에서 안 뚫림 + 스크롤.
-    // 단 크롬(Chromium)만 흡수 중 휠을 거부하므로, 대상이 크롬일 때만 흡수를 끈다(클릭스루 유지)
-    // → 크롬만 뚫리지만 스크롤됨. 이건 크롬 자체 한계라 크롬에 국한된 불가피한 예외다.
-    const overBtn = !!el?.closest('.rbtn')
-    setIgnore(targetIsChrome ? true : !overBtn)
-    handleClickPoll(x, y, pressed)  // 액션 버튼 물리 클릭(🔑 제외)
+    // 흡수(안 뚫림) 제거 — 오버레이는 항상 클릭스루라 물리 클릭이 대상 창으로 통과한다.
+    // 버튼은 부착으로 대상 창 위에 있으니 통과해도 그 창을 클릭할 뿐(무해) + 실제 물리휠이 통과해 스크롤됨.
+    setIgnore(true)
+    handleClickPoll(x, y, pressed)  // 액션 버튼 물리 클릭 감지(🔑 제외, 폴링 좌표+버튼상태 기반이라 클릭스루여도 동작)
     return
   }
   updateHover(x, y)  // dwell 액션 버튼
 })
 
-// 클릭모드 폴링 감지: 버튼 위에서 물리 좌클릭 누름 → 발동(반복이면 뗄 때까지). 오버레이는
-// 클릭스루라 클릭이 뒤 앱에도 전달됨(버튼은 빈 영역 배치 권장).
+// 클릭모드 폴링 감지: 버튼 위에서 물리 좌클릭 누름 → 발동(반복이면 뗄 때까지). 오버레이는 항상
+// 클릭스루라 클릭·실제 물리휠이 뒤 대상 창으로 통과(부착으로 버튼을 대상 창 위에 두는 게 기본).
 let clickHeldId: string | null = null
 function stopClickRepeat(id: string): void {
   const r = clickState.get(id)
