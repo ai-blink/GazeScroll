@@ -12,6 +12,7 @@ asarUnpack:
 win:
   # portable 타깃은 requestedExecutionLevel을 못 실어 실행 실패(electron-builder #7566) → zip 사용.
   # zip = win-unpacked 폴더째 압축. 압축 풀고 GazeScroll.exe 실행(설치 불필요).
+  icon: build/icon.ico
   target:
     - zip
   # 고무결성 표면(휴대폰 원격제어 등)에 SendInput 휠이 닿으려면 앱이 고무결성이어야 함(UIPI).
