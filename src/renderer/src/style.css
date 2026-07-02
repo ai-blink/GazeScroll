@@ -1,0 +1,471 @@
+:root {
+  --btn-size: 60px;
+  --btn-radius: 50%;
+  --btn-gap: 12px;
+  --rest-op: 0.55;
+  --hover-op: 1;
+  --dwell-ms: 700ms;
+  --font-size: 18px;
+  --gauge: #38bdf8;
+  --btn-bg: #1e293b;
+  --btn-fg: #e2e8f0;
+  --border-w: 1px;
+  --border-color: #334155;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.rbtn {
+  position: absolute;
+  width: var(--btn-size);
+  height: var(--btn-size);
+  border-radius: var(--btn-radius);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border: var(--border-w) solid var(--border-color);
+  display: grid;
+  place-items: center;
+  cursor: grab;
+  opacity: var(--rest-op);
+  transition: opacity 0.15s, transform 0.08s;
+  overflow: hidden;
+  user-select: none;
+  font-size: var(--font-size);
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(0,0,0,.45);
+  pointer-events: auto;
+}
+
+.rbtn:hover {
+  opacity: var(--hover-op);
+  transform: scale(1.04);
+  z-index: 5;
+}
+
+.rbtn .glyph {
+  position: relative;
+  z-index: 2;
+}
+
+.rbtn .sub-label {
+  position: absolute;
+  bottom: 3px;
+  left: 0; right: 0;
+  z-index: 2;
+  font-size: 9px;
+  font-weight: 500;
+  color: #94a3b8;
+  text-align: center;
+  letter-spacing: .02em;
+}
+
+.rbtn .fill {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 0;
+  z-index: 1;
+  background: linear-gradient(0deg, var(--gauge), transparent);
+  opacity: .85;
+}
+
+.rbtn.dwell-active .fill {
+  height: 100%;
+  transition: height var(--dwell-ms) linear;
+}
+
+/* ── 원형 게이지 (gaugeStyle='circular') ──────────────────────────────
+   버튼 전체에 conic-gradient 링을 얹고, dwell 진행에 따라 각도를 0→360° 스윕.
+   가운데는 mask로 뚫어 글리프가 보이게 한다(도넛). @property로 각도 transition. */
+@property --dwell-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+body.gauge-circular .rbtn .fill {
+  inset: 0;
+  height: auto;
+  background: conic-gradient(var(--gauge) var(--dwell-angle), transparent 0deg);
+  -webkit-mask: radial-gradient(circle, transparent 56%, #000 58%);
+          mask: radial-gradient(circle, transparent 56%, #000 58%);
+  opacity: .9;
+}
+body.gauge-circular .rbtn.dwell-active .fill {
+  height: auto;
+  --dwell-angle: 360deg;
+  transition: --dwell-angle var(--dwell-ms) linear;
+}
+
+/* ── 채움 왼→오 (gaugeStyle='fill-lr') ────────────────────────────────
+   기본 채움을 세로(아래→위)에서 가로(왼→오)로 바꾼다. 폭 0→100%. */
+body.gauge-fill-lr .rbtn .fill {
+  top: 0; bottom: 0; left: 0; right: auto;
+  width: 0; height: auto;
+  background: linear-gradient(90deg, var(--gauge), transparent);
+}
+body.gauge-fill-lr .rbtn.dwell-active .fill {
+  width: 100%; height: auto;
+  transition: width var(--dwell-ms) linear;
+}
+
+/* ── 확산 (gaugeStyle='expand') ───────────────────────────────────────
+   가운데 작은 점에서 시작해 원이 점점 커지며 버튼을 채운다.
+   부모(.rbtn)가 overflow:hidden이라 scale>1로 키워 모서리까지 덮고 잘라낸다. */
+body.gauge-expand .rbtn .fill {
+  inset: 0; height: auto;
+  background: var(--gauge);
+  border-radius: 50%;
+  transform: scale(0);
+  opacity: .9;
+}
+body.gauge-expand .rbtn.dwell-active .fill {
+  height: auto;
+  transform: scale(1.5);
+  opacity: .9;
+  transition: transform var(--dwell-ms) linear;
+}
+
+/* 충전 완료 → 발동 대기(armed): 게이지색 글로우 + 테두리 색전환 + 게이지 밝게.
+   "지금 충전 끝나 발동 중"임을 명확히 알린다(dev-ux 차별점). */
+.rbtn.dwell-armed {
+  border-color: var(--gauge);
+  box-shadow: 0 0 12px 2px var(--gauge);
+}
+.rbtn.dwell-armed .fill {
+  opacity: 1;
+  filter: brightness(1.45);
+}
+
+.rbtn.fired {
+  animation: pulse .35s ease;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 var(--gauge); }
+  100% { box-shadow: 0 0 0 14px transparent; }
+}
+
+.rbtn.dragging {
+  cursor: grabbing;
+  opacity: var(--hover-op);
+  transform: scale(1.08);
+}
+
+body.edit .rbtn {
+  outline: 2px dashed #f59e0b66;
+  cursor: move;
+}
+
+body.edit .rbtn .sub-label {
+  color: #fbbf24;
+}
+
+/* 🔑 편집키: 편집모드에선 드래그 이동 가능(move 커서) */
+.rbtn.edit-key { cursor: default; }
+body.edit .rbtn.edit-key { cursor: move; }
+
+/* ── 설정 패널 (편집모드에서만 표시) ── */
+#settings-panel {
+  display: none;
+  position: fixed;
+  top: 70px;
+  right: 20%;
+  width: 490px;
+  padding: 18px 20px;
+  background: rgba(15, 23, 42, .96);
+  border: 1px solid #334155;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.6);
+  color: #e2e8f0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 14px;
+  pointer-events: auto;
+  user-select: none;   /* 드래그 시 텍스트 블럭 방지 */
+  z-index: 50;
+}
+
+#settings-panel .sp-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #fbbf24;
+}
+
+/* 탭 헤더 + 패널 전환 */
+#settings-panel .sp-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+#settings-panel .sp-tab {
+  flex: 1;
+  padding: 6px 4px;
+  background: #1e293b;
+  color: #cbd5e1;
+  border: 1px solid #334155;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 12px;
+}
+#settings-panel .sp-tab.active {
+  background: #0ea5e9;
+  color: #04293a;
+  border-color: #0ea5e9;
+  font-weight: 700;
+}
+#settings-panel .sp-pane { display: none; }
+#settings-panel .sp-pane.active { display: block; }
+
+/* 탭 내부 2열 그리드 (넓은 항목은 sp-wide로 전폭) */
+#settings-panel .sp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 12px;
+}
+#settings-panel .sp-grid .sp-row { margin-bottom: 0; }
+#settings-panel .sp-grid .sp-wide { grid-column: 1 / -1; }
+
+/* 슬라이더 + 숫자입력 한 줄 */
+#settings-panel .sp-ctl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#settings-panel .sp-ctl input[type="range"] { flex: 1; }
+#settings-panel .sp-num {
+  width: 56px;
+  padding: 3px 4px;
+  background: #0f172a;
+  color: #e2e8f0;
+  border: 1px solid #334155;
+  border-radius: 5px;
+  font-size: 12px;
+  text-align: right;
+  user-select: text;   /* 숫자 입력은 선택 가능 */
+}
+
+#settings-panel .sp-row {
+  margin-bottom: 12px;
+}
+
+#settings-panel .sp-row label {
+  display: block;
+  margin-bottom: 5px;
+  color: #94a3b8;
+}
+
+#settings-panel .sp-val {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+#settings-panel input[type="range"] {
+  width: 100%;
+  accent-color: #38bdf8;
+  cursor: pointer;
+}
+
+#settings-panel .sp-seg {
+  display: flex;
+  gap: 6px;
+}
+
+#settings-panel .sp-seg button {
+  flex: 1;
+  padding: 6px 4px;
+  background: #1e293b;
+  color: #cbd5e1;
+  border: 1px solid #334155;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+#settings-panel .sp-seg button.active {
+  background: #0ea5e9;
+  color: #04293a;
+  border-color: #0ea5e9;
+  font-weight: 700;
+}
+
+/* 붙는 위치 3x3 앵커 선택 */
+#settings-panel .sp-anchor {
+  display: grid;
+  grid-template-columns: repeat(3, 30px);
+  gap: 4px;
+}
+#settings-panel .sp-anchor button {
+  width: 30px;
+  height: 26px;
+  background: #1e293b;
+  color: #cbd5e1;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+}
+#settings-panel .sp-anchor button.active {
+  background: #0ea5e9;
+  color: #04293a;
+  border-color: #0ea5e9;
+  font-weight: 700;
+}
+#settings-panel .sp-anchor button.mid {
+  cursor: default;
+  color: #475569;
+  background: #0f172a;
+}
+
+/* 색상 팔레트(7색 스와치) */
+#settings-panel .sp-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+#settings-panel .sp-palette .sw {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+#settings-panel .sp-palette .sw.active {
+  border-color: #fff;
+  box-shadow: 0 0 0 1px #0f172a;
+}
+
+/* 붙일 창 허용 목록 체크리스트 */
+#settings-panel .sp-hint {
+  color: #64748b;
+  font-weight: 400;
+  font-size: 11px;
+}
+/* 창 목록 = 네이티브 <table> (table-layout:fixed → 모든 행 열 완벽 정렬) */
+#settings-panel .sp-winlist {
+  max-height: 460px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #94a3b8;
+}
+#settings-panel .sp-wintable {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+#settings-panel .sp-wintable th,
+#settings-panel .sp-wintable td {
+  padding: 9px 11px;
+  border: 1px solid #1e2b45;   /* 격자선 */
+  text-align: left;
+  vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/* 열 폭 고정: 체크박스 44px / 앱 150px / 창 제목 가변 */
+#settings-panel .sp-wintable th:nth-child(1),
+#settings-panel .sp-wintable td:nth-child(1) { width: 44px; text-align: center; }
+#settings-panel .sp-wintable th:nth-child(2),
+#settings-panel .sp-wintable td:nth-child(2) { width: 150px; }
+/* 헤더: 상단 고정 */
+#settings-panel .sp-wintable th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #1e293b;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 700;
+}
+#settings-panel .sp-wintable tbody tr { cursor: pointer; }
+#settings-panel .sp-wintable tbody tr:nth-child(even) td { background: #0d1729; } /* zebra */
+#settings-panel .sp-wintable tbody tr:hover td { background: #1a2942; }
+#settings-panel .sp-wintable input {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  vertical-align: middle;
+  accent-color: #0ea5e9;
+  cursor: pointer;
+}
+#settings-panel .sp-win-app { color: #e2e8f0; font-weight: 600; }
+#settings-panel .sp-win-title { color: #64748b; font-size: 12px; }
+#settings-panel .sp-about {
+  margin-top: 8px;
+  text-align: center;
+  letter-spacing: .02em;
+}
+#settings-panel .sp-about-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 12px;
+  color: #cbd5e1;
+}
+#settings-panel .sp-contact {
+  padding: 3px 10px;
+  font-size: 11px;
+  color: #e2e8f0;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#settings-panel .sp-contact:hover {
+  border-color: #0ea5e9;
+  color: #7dd3fc;
+}
+#settings-panel .sp-copyright {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #64748b;
+}
+#settings-panel .sp-refresh {
+  width: 100%;
+  margin-top: 6px;
+  padding: 5px;
+  background: #1e293b;
+  color: #cbd5e1;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+#settings-panel .sp-refresh:hover { background: #334155; }
+
+#settings-panel .sp-done {
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px;
+  background: #b45309;
+  color: #fff7ed;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+#settings-panel .sp-done:hover {
+  background: #d97706;
+}

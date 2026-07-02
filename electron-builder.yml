@@ -1,0 +1,20 @@
+appId: com.gazescroll.app
+productName: GazeScroll
+directories:
+  output: dist-release
+  buildResources: build
+files:
+  - out/**/*
+  - package.json
+# koffi는 런타임에 네이티브 바인딩(.node)을 dlopen하므로 asar 밖으로 풀어야 로드된다.
+asarUnpack:
+  - "**/node_modules/koffi/**"
+win:
+  # portable 타깃은 requestedExecutionLevel을 못 실어 실행 실패(electron-builder #7566) → zip 사용.
+  # zip = win-unpacked 폴더째 압축. 압축 풀고 GazeScroll.exe 실행(설치 불필요).
+  target:
+    - zip
+  # 고무결성 표면(휴대폰 원격제어 등)에 SendInput 휠이 닿으려면 앱이 고무결성이어야 함(UIPI).
+  # requireAdministrator → 실행 시 승격. UAC "알림 안 함" 환경(안구마우스 PC)에선 프롬프트 없이 자동 승격.
+  # (uiAccess=true는 코드서명+Program Files 필요 → 후속 M5)
+  requestedExecutionLevel: requireAdministrator
