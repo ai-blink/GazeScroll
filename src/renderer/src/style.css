@@ -219,27 +219,37 @@ body.edit .rbtn.edit-key { cursor: move; }
   color: #fbbf24;
 }
 
-/* 탭 헤더 + 패널 전환 */
+/* 탭 헤더 + 패널 전환
+   진짜 '탭'으로 보이게: 하단 accent 레일 위에 얹힌 탭. 비활성은 배경 없는 납작한 텍스트,
+   활성만 accent 카드로 떠서 레일에 붙는다(크롬 탭바처럼 콘텐츠와 연결). 아래 세그먼트
+   버튼(각자 pill 박스)과 구조가 확연히 달라 "탭 줄 vs 선택 버튼 줄"이 한눈에 구분된다. */
 #settings-panel .sp-tabs {
   display: flex;
-  gap: 6px;
+  gap: 3px;
   margin-bottom: 12px;
+  border-bottom: 2px solid #0ea5e9;   /* 탭이 얹히는 레일 */
 }
 #settings-panel .sp-tab {
   flex: 1;
-  padding: 6px 4px;
-  background: #1e293b;
-  color: #cbd5e1;
-  border: 1px solid #334155;
-  border-radius: 7px;
+  padding: 7px 4px 6px;
+  background: transparent;            /* 비활성: 배경 없음 — 패널에 묻혀 '납작' */
+  color: #94a3b8;
+  border: none;
+  border-radius: 8px 8px 0 0;         /* 위 모서리만 = 탭 모양 */
   cursor: pointer;
   font-size: 12px;
+  position: relative;
+  top: 2px;                           /* 레일에 붙도록 살짝 내림 */
+  transition: background .12s, color .12s;
+}
+#settings-panel .sp-tab:hover {
+  background: #1e293b;
+  color: #e2e8f0;
 }
 #settings-panel .sp-tab.active {
   background: #0ea5e9;
   color: #04293a;
-  border-color: #0ea5e9;
-  font-weight: 700;
+  font-weight: 700;                    /* accent 카드가 레일에 붙어 '선택된 탭'임이 명확 */
 }
 #settings-panel .sp-pane { display: none; }
 #settings-panel .sp-pane.active { display: block; }
