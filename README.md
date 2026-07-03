@@ -1,12 +1,12 @@
 # GazeScroll
 
-**응시만으로 어디서든 스크롤 — 손이 힘든 순간을 위한 초경량 접근성 리모컨.**
-_Scroll anything just by looking at it. A tiny, simple accessibility remote for Windows 11._
+**커서만 올리면 어디서든 스크롤 — 휠도 클릭도 필요 없는 초경량 리모컨.**
+_Scroll anything by just hovering a button — no wheel, no click. A tiny, simple remote for Windows 11._
 
 ![platform](https://img.shields.io/badge/Windows-11-0078D4) ![license](https://img.shields.io/badge/License-MIT-green) ![UI](https://img.shields.io/badge/UI-7%20languages-1f6feb)
 
 <!-- 데모 이미지는 assets/ 에 넣으면 표시됩니다(파일명은 assets/README.md 참고) -->
-![GazeScroll 데모 — 버튼을 응시하면 아래 앱이 스크롤된다](assets/hero.gif)
+![GazeScroll 데모 — 버튼에 커서를 올리면 아래 앱이 스크롤된다](assets/hero.gif)
 
 ---
 
@@ -24,20 +24,22 @@ _Scroll anything just by looking at it. A tiny, simple accessibility remote for 
 ## 왜 심플한가요?
 
 - **학습이 필요 없습니다** — 버튼(▲▼)을 보면 무엇을 하는지 바로 압니다.
-- **진행이 눈에 보입니다** — 응시하는 동안 게이지가 차오르며 "지금 충전 중"을 시각화하고, 발동 직전 색이 바뀝니다.
+- **진행이 눈에 보입니다** — 커서를 올려둔 동안 게이지가 차오르며 "지금 충전 중"을 시각화하고, 발동 직전 색이 바뀝니다.
 - **군더더기 없는 3탭 설정** — 필요한 것만.
 
 복잡하고 배우기 어려운 기존 접근성 도구의 무게를 덜어낸 **경량판**을 지향합니다.
 
 ## 데모
 
-| 응시 스크롤 | 설정 (모양 탭) | 붙일 창 지정 |
-|:--:|:--:|:--:|
-| ![응시 스크롤](assets/dwell.gif) | ![설정 모양 탭](assets/settings.png) | ![붙일 창 허용목록](assets/winlist.png) |
+![커서만 올리면 스크롤 — 버튼에 커서를 올리면 페이지가 스크롤된다](assets/dwell.gif)
+
+| 설정 (모양 탭) | 붙일 창 지정 |
+|:--:|:--:|
+| ![설정 모양 탭](assets/settings.png) | ![붙일 창 허용목록](assets/winlist.png) |
 
 ## 주요 기능
 
-- **응시(dwell) 스크롤** — 버튼을 잠깐 바라보면 발동. 물리 클릭이 없어 전 앱에서 안정적.
+- **커서만 올리면 스크롤** — 버튼에 커서를 잠깐 올려두면(dwell) 발동. 물리 클릭이 없어 전 앱에서 안정적.
 - **클릭 모드**도 지원 — 즉각 반응을 선호하면 선택.
 - **창 붙이기(자동 추종)** — 스크롤 버튼이 대상 창에 앵커되어 창 이동/리사이즈를 따라갑니다. 붙는 위치는 대상 창 기준 8분할로 선택.
 - **붙을 창 지정** — 현재 창 목록에서 체크한 앱만 따라가게. 비우면 전체 허용.
