@@ -1,6 +1,6 @@
 {
   "name": "gazescroll",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "GazeScroll — 창에 붙는 경량 스크롤 리모컨(안구마우스·시선추적 접근성)",
   "author": "BlinkLabs <tia_access@naver.com>",
   "license": "MIT",
