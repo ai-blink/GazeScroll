@@ -31,9 +31,9 @@ _Scroll anything just by looking at it. A tiny, simple accessibility remote for 
 
 ## 데모
 
-| 응시 스크롤 | 창 붙이기(자동 추종) | 설정 |
+| 응시 스크롤 | 설정 (모양 탭) | 붙일 창 지정 |
 |:--:|:--:|:--:|
-| ![dwell](assets/dwell.gif) | ![attach](assets/attach.gif) | ![settings](assets/settings.png) |
+| ![응시 스크롤](assets/dwell.gif) | ![설정 모양 탭](assets/settings.png) | ![붙일 창 허용목록](assets/winlist.png) |
 
 ## 주요 기능
 
