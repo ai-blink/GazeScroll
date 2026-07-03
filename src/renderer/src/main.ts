@@ -54,6 +54,7 @@ interface Settings {
   scrollClicks: number
   scrollMethod: 'inject' | 'post' | 'child'
   editKey: { x: number; y: number } | null
+  quitKey: { x: number; y: number } | null
   editHoldMs: number
   attachMode: boolean
   attachAnchor: 'tl' | 't' | 'tr' | 'l' | 'r' | 'bl' | 'b' | 'br'
@@ -932,6 +933,46 @@ function createQuitKey(): void {
     <span class="glyph">⏻</span>
   `
   const cfg: ButtonConfig = { id: QUIT_KEY_ID, glyph: '⏻', label: t(settings?.lang ?? 'ko').trayQuit, x: 0, y: 0, action: 'quit' }
+
+  // 저장된 위치가 있으면 좌상단 px 기준으로 배치 (기본은 우하단 bottom/right:20%)
+  if (settings?.quitKey) {
+    el.style.bottom = 'auto'
+    el.style.right = 'auto'
+    el.style.left = settings.quitKey.x + 'px'
+    el.style.top = settings.quitKey.y + 'px'
+  }
+
+  // 편집모드에서 드래그 이동(위치는 settings.quitKey에 저장). 🔑 편집키와 동일 패턴.
+  let qdrag: { dx: number; dy: number } | null = null
+  el.addEventListener('pointerdown', (e) => {
+    if (!editMode) return
+    const r = el.getBoundingClientRect()
+    el.style.bottom = 'auto'
+    el.style.right = 'auto'
+    el.style.left = r.left + 'px'
+    el.style.top = r.top + 'px'
+    qdrag = { dx: e.clientX - r.left, dy: e.clientY - r.top }
+    dragActive = true
+    el.classList.add('dragging')
+    el.setPointerCapture(e.pointerId)
+    e.preventDefault()
+  })
+  el.addEventListener('pointermove', (e) => {
+    if (!qdrag) return
+    const w = el.offsetWidth, h = el.offsetHeight
+    const nx = Math.max(0, Math.min(e.clientX - qdrag.dx, overlayEl.offsetWidth - w))
+    const ny = Math.max(0, Math.min(e.clientY - qdrag.dy, overlayEl.offsetHeight - h))
+    el.style.left = nx + 'px'
+    el.style.top = ny + 'px'
+  })
+  el.addEventListener('pointerup', () => {
+    if (!qdrag) return
+    qdrag = null
+    dragActive = false
+    el.classList.remove('dragging')
+    if (settings) { settings.quitKey = { x: parseInt(el.style.left), y: parseInt(el.style.top) }; persist() }
+  })
+
   overlayEl.appendChild(el)
   buttons.set(QUIT_KEY_ID, { el, cfg })
 }

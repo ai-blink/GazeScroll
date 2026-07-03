@@ -37,6 +37,7 @@ export interface Settings {
   scrollMethod: 'inject' | 'post' | 'child'  // 스크롤 방식(기본 inject):
   // inject=SendInput 실제 물리휠(기본 — 부착이 버튼을 대상 창 위에 유지→앱 안 가리고 다 됨) / post=top-level PostMessage(크롬 등) / child=자식 컨트롤 PostMessage(메모장 등 클래식)
   editKey: { x: number; y: number } | null  // 🔑 편집키 위치(null=기본 좌하단)
+  quitKey: { x: number; y: number } | null  // ⏻ 전원 버튼 위치(null=기본 우하단)
   editHoldMs: number  // 🔑 편집 진입까지 길게 누름/응시 시간
   attachMode: boolean  // 붙이기: 스크롤 버튼이 대상 창을 자동 추종(창 이동/리사이즈 따라감)
   attachAnchor: 'tl' | 't' | 'tr' | 'l' | 'r' | 'bl' | 'b' | 'br'  // 붙는 위치(대상 창 기준 8분할)
@@ -80,6 +81,7 @@ const DEFAULT_SETTINGS: Settings = {
   scrollClicks: 3,
   scrollMethod: 'inject',   // 기본=실제 물리휠(부착이 버튼을 대상 창 위에 유지 → 앱 안 가리고 다 됨). auto/post/child는 폴백으로 선택 가능
   editKey: null,
+  quitKey: null,
   editHoldMs: 3000,
   attachMode: false,
   attachAnchor: 'r',
