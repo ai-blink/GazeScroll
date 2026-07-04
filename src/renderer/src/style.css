@@ -327,7 +327,12 @@ body.edit .rbtn.edit-key { cursor: move; }
   font-weight: 700;
 }
 
-/* 창 필터 방식: 허용 모드=청록(기본 active), 차단 모드=빨강으로 확실히 구분 */
+/* 창 필터 방식: 전체=회색 / 허용=청록(기본 active) / 차단=빨강으로 확실히 구분 */
+#settings-panel .sp-filtermode.is-all button.active {
+  background: #64748b;
+  color: #fff;
+  border-color: #64748b;
+}
 #settings-panel .sp-filtermode.is-block button.active {
   background: #ef4444;
   color: #fff;
@@ -337,6 +342,9 @@ body.edit .rbtn.edit-key { cursor: move; }
   margin-top: 5px;
   font-size: 11px;
   color: #7dd3fc;
+}
+#settings-panel .sp-filtermode.is-all ~ .sp-filterdesc {
+  color: #94a3b8;
 }
 #settings-panel .sp-filtermode.is-block ~ .sp-filterdesc {
   color: #fca5a5;

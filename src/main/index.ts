@@ -83,16 +83,16 @@ function startCursorPolling(): void {
     // 안구마우스 SW/시스템 창으로 잠깐 튀게 하므로, 클릭 직전의 대상 창을 고정해야 한다.
     // (오버레이가 포그라운드인 경우도 refreshScrollTarget 내부에서 스킵)
     const pressed = isLeftMouseDown()
-    // 창 필터: 목록이 비면 전체 허용(양 모드 공통). 목록이 있으면 필터 방식에 따라
-    //   allow: 목록에 있는 창에서만 lock 갱신(그 창들만 추종)
-    //   block: 목록에 있는 창은 제외하고 나머지에서 lock 갱신(그 창들만 안 따라감)
-    // → 다른 창을 포커스해도 지정 규칙대로 대상 창을 계속 추종/스크롤.
+    // 창 필터: 방식에 따라 lock 갱신 여부 결정 → 다른 창을 포커스해도 지정 규칙대로 추종/스크롤.
+    //   all  : 필터 없이 모든 창 추종(기본)
+    //   allow: 목록에 있는 창에서만 추종(목록 비면 전체 허용 = all과 동일)
+    //   block: 목록에 있는 창만 제외하고 나머지 추종
     if (!pressed) {
-      const list = settings.attachAllow
+      const mode = settings.attachFilterMode
       let pass = true
-      if (list.length > 0) {
-        const inList = list.includes(foregroundExe())
-        pass = settings.attachFilterMode === 'block' ? !inList : inList
+      if (mode !== 'all' && settings.attachAllow.length > 0) {
+        const inList = settings.attachAllow.includes(foregroundExe())
+        pass = mode === 'block' ? !inList : inList
       }
       if (pass) refreshScrollTarget(overlayHwndAddr)
     }

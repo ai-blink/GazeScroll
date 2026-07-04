@@ -59,7 +59,7 @@ interface Settings {
   attachMode: boolean
   attachAnchor: 'tl' | 't' | 'tr' | 'l' | 'r' | 'bl' | 'b' | 'br'
   attachAllow: string[]
-  attachFilterMode: 'allow' | 'block'
+  attachFilterMode: 'all' | 'allow' | 'block'
   lang: Lang
 }
 
@@ -481,12 +481,15 @@ function buildSettingsPanel(): void {
         <div class="sp-row sp-wide">
           <label>${L.filterModeLabel}</label>
           <div class="sp-seg sp-filtermode" data-group="filtermode">
+            <button data-val="all">${L.filterAll}</button>
             <button data-val="allow">✓ ${L.filterAllow}</button>
             <button data-val="block">✕ ${L.filterBlock}</button>
           </div>
           <div class="sp-filterdesc" id="sp-filterdesc"></div>
-          <div class="sp-winlist" id="sp-winlist"></div>
-          <button class="sp-refresh" id="sp-winrefresh">↻ ${L.winRefresh}</button>
+          <div class="sp-winwrap" id="sp-winwrap">
+            <div class="sp-winlist" id="sp-winlist"></div>
+            <button class="sp-refresh" id="sp-winrefresh">↻ ${L.winRefresh}</button>
+          </div>
         </div>
       </div>
     </div>
@@ -572,14 +575,19 @@ function buildSettingsPanel(): void {
     panelEl!.querySelectorAll<HTMLElement>('.sp-seg[data-group="gauge"] button').forEach((b) => {
       b.classList.toggle('active', b.dataset.val === s.gaugeStyle)
     })
-    // 창 필터 방식: 세그먼트 활성 + 차단 모드는 컨테이너에 is-block(빨강 강조) + 설명 문구 갱신.
+    // 창 필터 방식(전체/허용/차단): 세그먼트 활성 + 모드별 색(is-all 회색·기본 청록·is-block 빨강)
+    // + 설명 문구 갱신 + 창 목록은 전체 모드면 숨김(필터 대상 없음).
     panelEl!.querySelectorAll<HTMLElement>('.sp-seg[data-group="filtermode"] button').forEach((b) => {
       b.classList.toggle('active', b.dataset.val === s.attachFilterMode)
     })
-    const isBlock = s.attachFilterMode === 'block'
-    panelEl!.querySelector('.sp-filtermode')?.classList.toggle('is-block', isBlock)
+    const fmode = s.attachFilterMode
+    const fm = panelEl!.querySelector('.sp-filtermode')
+    fm?.classList.toggle('is-all', fmode === 'all')
+    fm?.classList.toggle('is-block', fmode === 'block')
     const fdesc = panelEl!.querySelector('#sp-filterdesc')
-    if (fdesc) fdesc.textContent = isBlock ? L.filterBlockDesc : L.filterAllowDesc
+    if (fdesc) fdesc.textContent = fmode === 'block' ? L.filterBlockDesc : fmode === 'allow' ? L.filterAllowDesc : L.filterAllDesc
+    const winwrap = panelEl!.querySelector('#sp-winwrap') as HTMLElement | null
+    if (winwrap) winwrap.style.display = fmode === 'all' ? 'none' : ''
   }
   syncMode()
 
@@ -628,7 +636,7 @@ function buildSettingsPanel(): void {
   })
   panelEl.querySelectorAll<HTMLElement>('.sp-seg[data-group="filtermode"] button').forEach((b) => {
     b.addEventListener('click', () => {
-      s.attachFilterMode = (b.dataset.val as 'allow' | 'block')
+      s.attachFilterMode = (b.dataset.val as 'all' | 'allow' | 'block')
       syncMode(); persist()
     })
   })
