@@ -16,3 +16,6 @@ notes/transfers/
 CLAUDE.md
 notes/
 doc/
+
+# 스킬 라우팅/복잡도 힌트 부산물(로컬 전용)
+complexity-hint.json

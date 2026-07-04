@@ -52,7 +52,6 @@ html, body {
 
 .rbtn:hover {
   opacity: var(--hover-op);
-  transform: scale(1.04);
   z-index: 5;
 }
 
@@ -101,6 +100,8 @@ html, body {
 body.gauge-circular .rbtn .fill {
   inset: 0;
   height: auto;
+  --dwell-angle: 0deg;              /* base 리셋값 */
+  transition: --dwell-angle 0s;     /* 이탈 시 진행 중이던 transition을 0s로 덮어 즉시 링을 비운다(360° stuck 방지) */
   border-radius: inherit;
   background: conic-gradient(var(--gauge) var(--dwell-angle), transparent 0deg);
   padding: calc(var(--btn-size, 60px) * 0.15);   /* 링 두께 */
