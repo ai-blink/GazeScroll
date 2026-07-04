@@ -27,6 +27,7 @@ let fnGetClassNameW: ((hwnd: unknown, buf: Buffer, max: number) => number) | nul
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let fnGetCursorPos: ((pt: any) => boolean) | null = null
 let fnGetAsyncKeyState: ((vKey: number) => number) | null = null
+let fnIsWindow: ((hwnd: unknown) => boolean) | null = null
 // 붙일 창 목록(EnumWindows) + exe명 조회용
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let kernel32: any = null
@@ -70,6 +71,7 @@ function init(): boolean {
     fnGetClassNameW = user32.func('GetClassNameW', 'int32', ['void *', 'uint8 *', 'int32'])
     fnGetCursorPos = user32.func('GetCursorPos', 'bool', [koffi.out(koffi.pointer(POINT))])
     fnGetAsyncKeyState = user32.func('GetAsyncKeyState', 'int16', ['int'])
+    fnIsWindow = user32.func('IsWindow', 'bool', ['void *'])
     // 붙일 창 목록: EnumWindows 콜백 + 창 가시성/제목/프로세스 조회, exe명은 kernel32 경유
     kernel32 = koffi.load('kernel32.dll')
     WNDENUMPROC = koffi.proto('bool WndEnumProc(void *hwnd, intptr_t lparam)')
@@ -151,11 +153,18 @@ function exeOf(hwnd: unknown): string {
 }
 
 // 현재 포그라운드 창의 exe명(소문자). 붙일 창 허용 목록 게이트용.
+// 50ms 폴링이 allow 목록 사용 시 매 틱 호출하므로, 같은 창이 계속 포그라운드면
+// OpenProcess/QueryFullProcessImageName 반복을 피하려 HWND(주소) 기준으로 캐시한다.
+let fgExeCache: { addr: bigint; exe: string } = { addr: 0n, exe: '' }
 export function foregroundExe(): string {
-  if (!init() || !fnGetForegroundWindow) return ''
+  if (!init() || !fnGetForegroundWindow || !koffiRef) return ''
   const hwnd = fnGetForegroundWindow()
   if (!hwnd) return ''
-  return exeOf(hwnd)
+  const addr = BigInt(koffiRef.address(hwnd))
+  if (addr === fgExeCache.addr) return fgExeCache.exe
+  const exe = exeOf(hwnd)
+  fgExeCache = { addr, exe }
+  return exe
 }
 
 // 보이는 top-level 창 목록(제목 있는 것만). exe명 기준 중복 제거(앱 1개=1행).
@@ -203,8 +212,13 @@ export function refreshScrollTarget(excludeAddr: bigint = 0n): void {
 }
 
 // 스크롤을 보낼 대상 창: lock된 창 우선, 없으면 현재 포그라운드.
+// lock된 창이 이미 닫혔으면(장시간 상주 중 대상 앱 종료·HWND 재사용) IsWindow로 걸러
+// 리셋하고 포그라운드로 폴백한다 — stale HWND에 스크롤/rect 조회하는 오작동 방지.
 function scrollTargetHwnd(): unknown {
-  if (lockedTargetHwnd) return lockedTargetHwnd
+  if (lockedTargetHwnd) {
+    if (!fnIsWindow || fnIsWindow(lockedTargetHwnd)) return lockedTargetHwnd
+    lockedTargetHwnd = null
+  }
   return fnGetForegroundWindow ? fnGetForegroundWindow() : null
 }
 

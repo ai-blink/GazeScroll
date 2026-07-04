@@ -796,6 +796,9 @@ function applyEditMode(enabled: boolean): void {
     leaveEditCharge()
     editKeyCharging = false
     if (currentHoverId) { leaveDwell(currentHoverId); currentHoverId = null }
+    // 편집모드 진입 시 onCursor가 초반 return하므로 handleClickPoll의 정지 경로에 도달 못 함.
+    // 클릭 반복(click+repeat)이 돌던 중이면 여기서 좀비 interval을 직접 정리한다.
+    if (clickHeldId) { stopClickRepeat(clickHeldId); clickHeldId = null }
     showSettingsPanel(true)
   } else {
     showSettingsPanel(false)

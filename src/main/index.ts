@@ -69,6 +69,9 @@ function createOverlay(): void {
 // 전역 커서 위치를 폴링해 renderer로 보낸다 (forward mousemove가 비포커스 클릭스루 창엔
 // 오지 않으므로 — AltController 방식). renderer는 이 좌표로 버튼 hover/dwell을 판정한다.
 let cursorTimer: ReturnType<typeof setInterval> | null = null
+// 붙이기 모드 target-rect IPC 중복 억제 캐시 — 대상 창이 안 움직이면 매 틱 renderer로
+// 같은 rect를 보내 버튼 DOM을 재배치하던 낭비를 없앤다. attachMode 토글 시 리셋(아래 save-settings).
+let lastSentRect = { x: NaN, y: NaN, w: NaN, h: NaN }
 function startCursorPolling(): void {
   if (cursorTimer) return
   cursorTimer = setInterval(() => {
@@ -101,9 +104,12 @@ function startCursorPolling(): void {
       if (r) {
         const tl = screen.screenToDipPoint({ x: r.left, y: r.top })
         const br = screen.screenToDipPoint({ x: r.right, y: r.bottom })
-        overlay.webContents.send('target-rect',
-          Math.round(tl.x - b.x), Math.round(tl.y - b.y),
-          Math.round(br.x - tl.x), Math.round(br.y - tl.y))
+        const rx = Math.round(tl.x - b.x), ry = Math.round(tl.y - b.y)
+        const rw = Math.round(br.x - tl.x), rh = Math.round(br.y - tl.y)
+        if (rx !== lastSentRect.x || ry !== lastSentRect.y || rw !== lastSentRect.w || rh !== lastSentRect.h) {
+          lastSentRect = { x: rx, y: ry, w: rw, h: rh }
+          overlay.webContents.send('target-rect', rx, ry, rw, rh)
+        }
       }
     }
   }, 50)
@@ -187,6 +193,7 @@ ipcMain.on('save-settings', (_e, newSettings: Partial<Settings>) => {
   settings = { ...settings, ...newSettings }
   saveSettings(settings)
   applyTrayLang()  // 언어가 바뀌었을 수 있으니 트레이도 갱신(값 동일하면 무해)
+  lastSentRect = { x: NaN, y: NaN, w: NaN, h: NaN }  // attach 토글·앵커 변경 시 다음 폴링에서 무조건 재전송
 })
 
 ipcMain.on('toggle-overlay', () => toggleOverlay())
