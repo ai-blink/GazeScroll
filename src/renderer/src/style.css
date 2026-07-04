@@ -327,6 +327,21 @@ body.edit .rbtn.edit-key { cursor: move; }
   font-weight: 700;
 }
 
+/* 창 필터 방식: 허용 모드=청록(기본 active), 차단 모드=빨강으로 확실히 구분 */
+#settings-panel .sp-filtermode.is-block button.active {
+  background: #ef4444;
+  color: #fff;
+  border-color: #ef4444;
+}
+#settings-panel .sp-filterdesc {
+  margin-top: 5px;
+  font-size: 11px;
+  color: #7dd3fc;
+}
+#settings-panel .sp-filtermode.is-block ~ .sp-filterdesc {
+  color: #fca5a5;
+}
+
 /* 언어 선택 세그먼트: 7개 언어라 한 줄에 안 맞으면 줄바꿈(고정 flex:1 대신 내용 폭) */
 #settings-panel .sp-lang {
   flex-wrap: wrap;

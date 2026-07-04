@@ -41,7 +41,8 @@ export interface Settings {
   editHoldMs: number  // 🔑 편집 진입까지 길게 누름/응시 시간
   attachMode: boolean  // 붙이기: 스크롤 버튼이 대상 창을 자동 추종(창 이동/리사이즈 따라감)
   attachAnchor: 'tl' | 't' | 'tr' | 'l' | 'r' | 'bl' | 'b' | 'br'  // 붙는 위치(대상 창 기준 8분할)
-  attachAllow: string[]  // 붙일 창 허용 목록(exe명, 소문자). 비어 있으면 전체 허용(기본)
+  attachAllow: string[]  // 창 필터 목록(exe명, 소문자). 비어 있으면 전체 허용(기본)
+  attachFilterMode: 'allow' | 'block'  // 필터 방식: allow=목록 창에서만 추종 / block=목록 창만 제외
   globalHotkey: string
   showOverlay: boolean
   lang: Lang  // UI 언어(ko/en/ja/zh-CN/zh-TW/hi/es). 기본 ko.
@@ -86,6 +87,7 @@ const DEFAULT_SETTINGS: Settings = {
   attachMode: false,
   attachAnchor: 'r',
   attachAllow: [],
+  attachFilterMode: 'allow',
   globalHotkey: 'Alt+F12',
   showOverlay: true,
   lang: 'ko'

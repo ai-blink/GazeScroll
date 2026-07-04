@@ -58,6 +58,11 @@ export interface Strings {
   off: string
   on: string
   attachAnchor: string
+  filterModeLabel: string   // 창 필터 방식 라벨
+  filterAllow: string       // 허용 모드 세그먼트
+  filterBlock: string       // 차단 모드 세그먼트
+  filterAllowDesc: string   // 허용 모드 목록 설명(체크=이 창들만)
+  filterBlockDesc: string   // 차단 모드 목록 설명(체크=이 창들 제외)
   attachAllow: string
   attachAllowHint: string
   winRefresh: string
@@ -127,6 +132,11 @@ const ko: Strings = {
   off: '끄기',
   on: '켜기',
   attachAnchor: '붙는 위치 (대상 창 기준)',
+  filterModeLabel: '창 필터 방식',
+  filterAllow: '허용 모드',
+  filterBlock: '차단 모드',
+  filterAllowDesc: '체크한 창에서만 작동',
+  filterBlockDesc: '체크한 창만 제외',
   attachAllow: '붙일 창 허용 목록',
   attachAllowHint: '(비우면 전체 허용)',
   winRefresh: '목록 새로고침',
@@ -192,6 +202,11 @@ const en: Strings = {
   off: 'Off',
   on: 'On',
   attachAnchor: 'Anchor (on target window)',
+  filterModeLabel: 'Window filter',
+  filterAllow: 'Allow mode',
+  filterBlock: 'Block mode',
+  filterAllowDesc: 'Follow only checked windows',
+  filterBlockDesc: 'Follow all except checked',
   attachAllow: 'Allowed windows',
   attachAllowHint: '(empty = allow all)',
   winRefresh: 'Refresh list',
@@ -257,6 +272,11 @@ const ja: Strings = {
   off: 'オフ',
   on: 'オン',
   attachAnchor: '貼り付け位置 (対象ウィンドウ基準)',
+  filterModeLabel: 'ウィンドウフィルター',
+  filterAllow: '許可モード',
+  filterBlock: 'ブロックモード',
+  filterAllowDesc: 'チェックした窓のみ追従',
+  filterBlockDesc: 'チェックした窓を除外',
   attachAllow: '対象ウィンドウ許可リスト',
   attachAllowHint: '(空欄=すべて許可)',
   winRefresh: 'リスト更新',
@@ -322,6 +342,11 @@ const zhCN: Strings = {
   off: '关',
   on: '开',
   attachAnchor: '吸附位置 (相对目标窗口)',
+  filterModeLabel: '窗口过滤方式',
+  filterAllow: '允许模式',
+  filterBlock: '屏蔽模式',
+  filterAllowDesc: '仅跟随勾选的窗口',
+  filterBlockDesc: '排除勾选的窗口',
   attachAllow: '允许窗口列表',
   attachAllowHint: '(留空=全部允许)',
   winRefresh: '刷新列表',
@@ -387,6 +412,11 @@ const zhTW: Strings = {
   off: '關',
   on: '開',
   attachAnchor: '吸附位置 (相對目標視窗)',
+  filterModeLabel: '視窗過濾方式',
+  filterAllow: '允許模式',
+  filterBlock: '封鎖模式',
+  filterAllowDesc: '僅跟隨勾選的視窗',
+  filterBlockDesc: '排除勾選的視窗',
   attachAllow: '允許視窗清單',
   attachAllowHint: '(留空=全部允許)',
   winRefresh: '重新整理清單',
@@ -452,6 +482,11 @@ const hi: Strings = {
   off: 'बंद',
   on: 'चालू',
   attachAnchor: 'जोड़ने की जगह (लक्ष्य विंडो पर)',
+  filterModeLabel: 'विंडो फ़िल्टर',
+  filterAllow: 'अनुमति मोड',
+  filterBlock: 'ब्लॉक मोड',
+  filterAllowDesc: 'केवल चयनित विंडो का अनुसरण',
+  filterBlockDesc: 'चयनित को छोड़कर सभी',
   attachAllow: 'अनुमत विंडो सूची',
   attachAllowHint: '(खाली = सभी अनुमत)',
   winRefresh: 'सूची ताज़ा करें',
@@ -517,6 +552,11 @@ const es: Strings = {
   off: 'Desactivado',
   on: 'Activado',
   attachAnchor: 'Posición (en ventana objetivo)',
+  filterModeLabel: 'Filtro de ventanas',
+  filterAllow: 'Modo permitir',
+  filterBlock: 'Modo bloquear',
+  filterAllowDesc: 'Seguir solo las marcadas',
+  filterBlockDesc: 'Seguir todas excepto marcadas',
   attachAllow: 'Ventanas permitidas',
   attachAllowHint: '(vacío = todas)',
   winRefresh: 'Actualizar lista',

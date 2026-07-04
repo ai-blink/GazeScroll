@@ -59,6 +59,7 @@ interface Settings {
   attachMode: boolean
   attachAnchor: 'tl' | 't' | 'tr' | 'l' | 'r' | 'bl' | 'b' | 'br'
   attachAllow: string[]
+  attachFilterMode: 'allow' | 'block'
   lang: Lang
 }
 
@@ -478,7 +479,12 @@ function buildSettingsPanel(): void {
           </div>
         </div>
         <div class="sp-row sp-wide">
-          <label>${L.attachAllow} <span class="sp-hint">${L.attachAllowHint}</span></label>
+          <label>${L.filterModeLabel}</label>
+          <div class="sp-seg sp-filtermode" data-group="filtermode">
+            <button data-val="allow">✓ ${L.filterAllow}</button>
+            <button data-val="block">✕ ${L.filterBlock}</button>
+          </div>
+          <div class="sp-filterdesc" id="sp-filterdesc"></div>
           <div class="sp-winlist" id="sp-winlist"></div>
           <button class="sp-refresh" id="sp-winrefresh">↻ ${L.winRefresh}</button>
         </div>
@@ -566,6 +572,14 @@ function buildSettingsPanel(): void {
     panelEl!.querySelectorAll<HTMLElement>('.sp-seg[data-group="gauge"] button').forEach((b) => {
       b.classList.toggle('active', b.dataset.val === s.gaugeStyle)
     })
+    // 창 필터 방식: 세그먼트 활성 + 차단 모드는 컨테이너에 is-block(빨강 강조) + 설명 문구 갱신.
+    panelEl!.querySelectorAll<HTMLElement>('.sp-seg[data-group="filtermode"] button').forEach((b) => {
+      b.classList.toggle('active', b.dataset.val === s.attachFilterMode)
+    })
+    const isBlock = s.attachFilterMode === 'block'
+    panelEl!.querySelector('.sp-filtermode')?.classList.toggle('is-block', isBlock)
+    const fdesc = panelEl!.querySelector('#sp-filterdesc')
+    if (fdesc) fdesc.textContent = isBlock ? L.filterBlockDesc : L.filterAllowDesc
   }
   syncMode()
 
@@ -610,6 +624,12 @@ function buildSettingsPanel(): void {
     b.addEventListener('click', () => {
       s.gaugeStyle = (b.dataset.val as Settings['gaugeStyle'])
       applySettings(s); syncMode(); persist()
+    })
+  })
+  panelEl.querySelectorAll<HTMLElement>('.sp-seg[data-group="filtermode"] button').forEach((b) => {
+    b.addEventListener('click', () => {
+      s.attachFilterMode = (b.dataset.val as 'allow' | 'block')
+      syncMode(); persist()
     })
   })
   // 언어 선택: 클릭 즉시 저장 + 패널 재생성으로 재번역(모든 라벨을 새 언어로).
