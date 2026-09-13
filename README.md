@@ -1,150 +1,174 @@
 # GazeScroll
 
-**커서만 올리면 어디서든 스크롤 — 휠도 클릭도 필요 없는 초경량 리모컨.**
-_Scroll anything by just hovering a button — no wheel, no click. A tiny, simple remote for Windows 11._
+> **Scroll any Windows app by hovering a button — no mouse wheel and no click required.**
+>
+> A lightweight, always-on-top remote for Windows 11, designed especially for eye tracking and other limited-input environments.
 
-![platform](https://img.shields.io/badge/Windows-11-0078D4) ![license](https://img.shields.io/badge/License-MIT-green) ![UI](https://img.shields.io/badge/UI-7%20languages-1f6feb)
+[![Platform](https://img.shields.io/badge/Windows-11-0078D4)](#requirements)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![Interface languages](https://img.shields.io/badge/UI-7%20languages-1f6feb)](#features)
 
-<!-- 데모 이미지는 assets/ 에 넣으면 표시됩니다(파일명은 assets/README.md 참고) -->
-![GazeScroll 데모 — 버튼에 커서를 올리면 아래 앱이 스크롤된다](assets/hero.gif)
+**English** · [한국어](README.ko.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
 
----
-
-## 이게 뭔가요?
-
-화면에 떠 있는 작은 버튼을 **마우스 커서를 올리기만(dwell)** 하면, 지금 쓰고 있는 앱이 스크롤됩니다.
-전체 화면을 덮는 **투명 클릭스루 오버레이**라 크롬·메모장·터미널·카톡 등 앱을 가리지 않고 동작합니다.
-마우스 휠을 굴리지 않아도, 클릭하지 않아도 됩니다.
-
-## 누구를 위한 앱인가요?
-
-- ♿ **마우스 휠·키보드·마우스 조작이 어려운 분** — 마우스 사용이 힘들거나, 안구마우스(시선 추적)·지체장애 등 제한된 입력 환경에서, **커서 이동만으로** 스크롤하고 키를 입력할 수 있습니다. 물리 클릭이 없어 "클릭이 뒤 앱으로 뚫리는" 문제도 없습니다.
-- 🧑‍💻 **반복 클릭·휠로 손목이 아픈 사무직** — 문서·웹을 오래 보며 스크롤할 때마다 휠을 굴리고 클릭하는 **횟수를 줄여**, 반복 사용에 따른 손목·손가락 부담을 더는 데 도움이 될 수 있습니다.
-
-## 왜 심플한가요?
-
-- **학습이 필요 없습니다** — 버튼(▲▼)을 보면 무엇을 하는지 바로 압니다.
-- **진행이 눈에 보입니다** — 커서를 올려둔 동안 게이지가 차오르며 "지금 충전 중"을 시각화하고, 발동 직전 색이 바뀝니다.
-- **군더더기 없는 3탭 설정** — 필요한 것만.
-
-복잡하고 배우기 어려운 기존 접근성 도구의 무게를 덜어낸 **경량판**을 지향합니다.
-
-## 데모
-
-![커서만 올리면 스크롤 — 버튼에 커서를 올리면 페이지가 스크롤된다](assets/dwell.gif)
-
-| 설정 (모양 탭) | 붙일 창 지정 |
-|:--:|:--:|
-| ![설정 모양 탭](assets/settings.png) | ![붙일 창 허용목록](assets/winlist.png) |
-
-## 주요 기능
-
-- **커서만 올리면 스크롤** — 버튼에 커서를 잠깐 올려두면(dwell) 발동. 물리 클릭이 없어 전 앱에서 안정적.
-- **클릭 모드**도 지원 — 즉각 반응을 선호하면 선택.
-- **창 붙이기(자동 추종)** — 스크롤 버튼이 대상 창에 앵커되어 창 이동/리사이즈를 따라갑니다. 붙는 위치는 대상 창 기준 8분할로 선택.
-- **붙을 창 지정** — 현재 창 목록에서 체크한 앱만 따라가게. 비우면 전체 허용.
-- **커스터마이즈** — 버튼 크기·모양(원형/둥근/각짐), 응시 게이지 4종(채움↑/채움→/원형/확산), 7색 팔레트.
-- **7개 언어** — 한국어·English·日本語·简体中文·繁體中文·हिन्दी·Español.
-- **방해되지 않음** — 트레이 상주, 항상 위, **포커스/포그라운드를 절대 뺏지 않아** 쓰던 앱이 그대로 유지됩니다.
-
-## 설치
-
-1. [Releases](https://github.com/ai-blink/GazeScroll/releases)에서 `GazeScroll-<버전>-win.zip`을 받습니다.
-2. 압축을 풀고 `GazeScroll.exe`를 실행합니다. **설치 불필요.**
-
-> 휴대폰 원격제어처럼 보호된(고무결성) 창을 스크롤하려면 **관리자 권한 실행**이 필요합니다(아래 "작동 원리" 참고).
-
-## 사용법
-
-| 하고 싶은 것 | 방법 |
-|------|------|
-| **스크롤/키 발동** | 버튼에 커서를 올려 **700ms 응시** → 발동. 유지하면 반복 스크롤 |
-| **설정 · 버튼 이동** | **Alt+E** 토글, 또는 화면의 **🔑 편집키를 3초 응시** → 편집 모드. "편집 완료"로 저장·복귀 |
-| **표시/숨김** | **Alt+F12**, 또는 트레이 아이콘 클릭 |
-| **종료** | 화면의 **⏻ 버튼** 발동, 또는 트레이 우클릭 → 종료 |
-
-작동 방식은 설정에서 바꿀 수 있습니다: **응시(dwell) / 클릭**, **단발 / 반복**. 설정은 `%APPDATA%/gazescroll/gazescroll/settings.json`에 저장되며, 삭제하면 기본값(화면 중앙 ▲▼ 2버튼)으로 초기화됩니다.
-
-## 설정 패널 (편집 모드에서 3탭)
-
-- **동작** — 응시/클릭 · 단발/반복 · 스크롤 방식(자동/크롬형/클래식/실휠) · 응시 시간.
-- **모양** — **언어(7종)** · 버튼 크기·모양(원형/둥근/각짐) · 게이지 4종 · 7색 팔레트 · 테두리 · 투명도.
-- **붙일 창** — 붙이기 켜기/끄기 · 붙는 위치(8분할) · 붙을 창 허용 목록.
-
-하단 **✉ 문의**를 누르면 앱 정보·제작자·라이선스·연락처가 담긴 정보 창이 열립니다.
+![GazeScroll demo — hovering over a button scrolls the app underneath](assets/hero.gif)
 
 ---
+
+## What is GazeScroll?
+
+GazeScroll places a small floating control on your screen. Hover the mouse pointer over its ▲ or ▼ button for a moment, and the application you are using scrolls automatically.
+
+It is a transparent, click-through overlay, so it can work above Chrome, Notepad, terminals, KakaoTalk, and many other Windows applications without blocking them or taking focus away.
+
+No mouse wheel. No physical click.
+
+## Who is it for?
+
+- **People who have difficulty using a mouse wheel, keyboard, or physical mouse controls** — including people using eye-tracking input, gaze mice, or other accessibility devices. GazeScroll lets you scroll and trigger keys using pointer movement alone.
+- **People who scroll repeatedly while working** — it can reduce repeated wheel and click actions during long sessions with documents, websites, and other scrollable content.
+
+## Why is it intentionally simple?
+
+- **No learning curve** — ▲ and ▼ buttons are immediately understandable.
+- **Visible dwell feedback** — a progress indicator fills while you hover, so you can see when an action is about to trigger.
+- **A focused three-tab settings panel** — only the controls you actually need.
+
+GazeScroll aims to offer a lighter, more direct alternative to complex accessibility tools.
+
+## Demo
+
+![Hover over a button to scroll](assets/dwell.gif)
+
+| Appearance settings | Choose which windows to attach to |
+| :--: | :--: |
+| ![Appearance settings](assets/settings.png) | ![Attached-window allow list](assets/winlist.png) |
+
+## Features
+
+- **Hover-to-scroll** — hold the pointer over a button for a configurable dwell time to scroll. Physical clicking is not required.
+- **Click mode** — available when you prefer an immediate action.
+- **Attach to a window** — the button group can follow a target window as it moves or resizes. Choose from eight anchor positions.
+- **Window allow list** — attach only to selected applications, or leave the list empty to allow all windows.
+- **Custom appearance** — button size, circle/rounded/square shapes, four dwell-indicator styles, seven color palettes, borders, and opacity.
+- **Seven interface languages** — Korean, English, Japanese, Simplified Chinese, Traditional Chinese, Hindi, and Spanish.
+- **Does not interrupt your work** — stays in the system tray, remains on top, and does not steal focus or foreground status from the application you are using.
+
+## Requirements
+
+- Windows 11
+- Administrator privileges may be needed when scrolling protected or elevated applications, such as some phone remote-control tools.
+
+## Installation
+
+1. Download `GazeScroll-<version>-win.zip` from [Releases](https://github.com/ai-blink/GazeScroll/releases).
+2. Extract the ZIP archive.
+3. Run `GazeScroll.exe`.
+
+No installation is required.
+
+> To scroll protected or elevated windows, run GazeScroll as Administrator. See [How it works](#how-it-works) for details.
+
+## How to use it
+
+| What you want to do | How |
+| --- | --- |
+| **Scroll or trigger a key** | Hover over a button for **700 ms** to trigger it. Keep hovering to repeat scrolling. |
+| **Open settings or move buttons** | Press **Alt+E**, or dwell on the on-screen **🔑 edit button** for three seconds. Select **Finish editing** to save and return to normal mode. |
+| **Show or hide GazeScroll** | Press **Alt+F12**, or click the tray icon. |
+| **Exit** | Trigger the on-screen **⏻ button**, or right-click the tray icon and select Exit. |
+
+You can change the interaction method in Settings:
+
+- **Dwell** or **Click**
+- **Single action** or **Repeat**
+- Scroll delivery method and dwell duration
+
+Settings are saved at:
+
+```text
+%APPDATA%\gazescroll\gazescroll\settings.json
+```
+
+Delete that file to restore the default layout: ▲ and ▼ buttons in the middle of the screen.
+
+## Settings
+
+Open Edit mode to access three settings tabs:
+
+- **Behavior** — dwell/click mode, single/repeat behavior, scroll method (`Auto`, `Chrome-style`, `Classic`, or `Real wheel`), and dwell duration.
+- **Appearance** — UI language, button size and shape, dwell indicator style, color palette, border, and opacity.
+- **Attach to window** — turn attachment on or off, select an eight-way anchor position, and manage the allowed-window list.
+
+The **✉ Contact** button opens an About dialog with app details, author information, license information, and contact details.
 
 <details>
-<summary><b>작동 원리 (개발자용)</b></summary>
+<summary><strong>How it works</strong></summary>
 
-### 스크롤 입력 — 앱마다 휠 받는 법이 다름
+### Different applications receive scroll input differently
 
-전역 스크롤은 단순하지 않습니다. 앱마다 합성 휠을 받는 방식이 정반대라 대상 창 클래스로 경로를 분기합니다.
+Global scrolling is not one-size-fits-all. GazeScroll selects a delivery method based on the target window class.
 
-| 방식 | 대상 | 구현 |
-|------|------|------|
-| **post** | 크롬류 Chromium (크롬/Edge/Electron) | top-level 창에 `PostMessage(WM_MOUSEWHEEL)` |
-| **child** | 클래식 Win32 (메모장·터미널·카톡 등) | 가장 깊은 자식 컨트롤에 `PostMessage(WM_MOUSEWHEEL)` |
-| **inject** | PostMessage 무시 앱 / 휴대폰 원격제어 | `SendInput` 실제 OS 휠 (커서 위치 그대로) |
-| **auto**(기본) | 대상 클래스로 자동 | `Chrome_WidgetWin*` → post, 그 외 → child |
+| Method | Best for | Implementation |
+| --- | --- | --- |
+| **Post** | Chromium applications such as Chrome, Edge, and Electron apps | Sends `WM_MOUSEWHEEL` with `PostMessage` to the top-level window |
+| **Child** | Classic Win32 apps such as Notepad, terminals, and KakaoTalk | Sends `WM_MOUSEWHEEL` to the deepest child control |
+| **Inject** | Apps that ignore posted messages, including phone remote-control apps | Sends a real OS wheel event with `SendInput` |
+| **Auto** (default) | Most applications | Uses `Post` for `Chrome_WidgetWin*`; otherwise uses `Child` |
 
-- Chromium은 합성 `PostMessage`를 자식에 보내면 무시하지만 top-level에 보내면 처리합니다 → `post`.
-- 클래식 Win32는 `SendInput` 휠을 잘 안 먹고 `PostMessage`는 받되, 실제 휠은 자식 컨트롤이 처리하므로 가장 깊은 자식까지 내려가 보냅니다 → `child`.
-- `inject`는 커서를 옮기지 않습니다. 오버레이가 클릭스루라 휠이 버튼 아래 대상 창으로 통과하므로 **버튼이 대상 창 콘텐츠 위**에 있어야 그 창이 스크롤됩니다(붙이기로 자동 유지).
-- **대상 창 lock + 좌클릭 freeze**: 마지막 비-오버레이 포그라운드 창을 기억해 거기로 스크롤을 보내고, 좌클릭 중엔 lock 갱신을 동결합니다.
+- Chromium applications generally ignore a synthetic wheel message sent to a child control, but accept it on the top-level window.
+- Classic Win32 applications often process scroll messages in their deepest child control.
+- `Inject` does not move the pointer. Because the overlay is click-through, the GazeScroll button must be positioned over the target window’s content. Window attachment keeps it there automatically.
+- GazeScroll remembers the last non-overlay foreground window as its scroll target and freezes target updates while the left mouse button is held.
 
-### 붙이기 + 붙을 창 허용 목록
+### Hover detection
 
-`attachMode` ON이면 대상 창의 `GetWindowRect`를 폴링해 renderer로 보내고, 버튼 그룹을 `attachAnchor`(8분할)에 맞춰 앵커합니다. 허용 목록은 `EnumWindows`로 창을, `kernel32`로 소유 **exe명**을 조회해(HWND는 세션마다 바뀌므로) exe 기준으로 영속화합니다.
+The overlay must stay click-through so wheel input reaches the app below it. Since a non-focusable Electron window cannot rely on normal mouse-move events, GazeScroll polls the global cursor position every 50 ms and performs hover/dwell detection from that position.
 
-### hover 판정 = 전역 커서 폴링
+The window uses `focusable: false` and `showInactive()`, so it does not steal focus or foreground status.
 
-오버레이는 항상 클릭스루라야 휠이 아래 창에 닿습니다. Electron `forward` mousemove는 포커스가 있어야 오는데 오버레이는 `showInactive`로 포커스가 없으므로, main에서 `GetCursorPos`를 50ms 폴링해 좌표를 보내 hover/dwell을 판정합니다. 창은 `focusable:false` + `showInactive()`로 포커스/포그라운드를 절대 탈취하지 않습니다(AltController 방식).
+### Project structure
 
-### 구조
-
-```
+```text
 src/
-  main/index.ts       오버레이 창·트레이·전역 단축키·IPC·50ms 커서/대상창 폴링
-  main/input.ts       koffi FFI (user32/kernel32) — 스크롤·키 합성, 커서 read, 창 목록(EnumWindows)+exe
-  main/settings.ts    Settings 타입·기본값·load/save
-  preload/index.ts    contextBridge IPC 브리지(window.api)
-  renderer/src/main.ts  버튼 렌더·dwell/click 판정·붙이기·설정 패널·정보 모달
-  renderer/src/style.css  버튼·게이지·패널 스타일
-  shared/i18n.ts      다국어 문자열 사전(main·renderer 공용)
+  main/index.ts             Overlay window, tray, global shortcuts, IPC, cursor and target-window polling
+  main/input.ts             koffi Win32 FFI: scrolling, key input, cursor reads, window enumeration
+  main/settings.ts          Settings types, defaults, loading, and saving
+  preload/index.ts          contextBridge IPC API (window.api)
+  renderer/src/main.ts      Button UI, dwell/click detection, attachment, settings panel, About dialog
+  renderer/src/style.css    Button, gauge, panel, and visual styles
+  shared/i18n.ts            Shared localization dictionary for main and renderer
 ```
 
-의존성 규칙: renderer는 main을 직접 import하지 않고 preload `window.api` IPC만, `input.ts`는 electron 없이 순수 Win32 FFI입니다.
+The renderer never imports main-process modules directly. It communicates only through the preload `window.api` IPC bridge. `input.ts` remains pure Win32 FFI code without Electron dependencies.
 
-### 배포
+### Packaging
 
 ```bash
-npm run dist   # → dist-release/GazeScroll-<ver>-win.zip
+npm run dist
+# Output: dist-release/GazeScroll-<version>-win.zip
 ```
 
-- **zip 타깃 + `requireAdministrator`**: portable은 실행 수준을 못 실어 실패하는 이슈(electron-builder #7566)로 zip 사용. koffi 네이티브 바인딩은 `asarUnpack` 필수.
-- **관리자 실행**: 휴대폰 원격제어 등 고무결성/보호 표면은 일반 권한 `SendInput`이 UIPI에 막혀 버려지므로, `requireAdministrator`로 승격해야 합성 휠이 전달됩니다. UAC "알림 안 함" 환경에선 프롬프트 없이 자동 승격.
-- **inject 실휠 규칙**: ① 관리자 실행 + ② 버튼을 대상 창 위에(붙이기). 둘 다 충족돼야 원격제어 창이 스크롤됩니다.
+The release uses a ZIP target because portable Windows executables cannot reliably embed the requested elevation level. Native `koffi` bindings must remain unpacked from ASAR.
 
-### 알려진 제약
+### Known limitations
 
-- **클릭 모드 + 크롬**: Chromium이 흡수 중 합성 휠을 거부해 click 모드에서 "안 뚫림 + 스크롤" 동시 달성은 크롬만 불가. **주력인 dwell 모드는 정상**이라 실사용 영향 없음.
-- **관리자 권한**: 관리자로 실행된 앱/보호 표면은 일반 권한 오버레이 입력이 UIPI로 차단될 수 있습니다(→ 관리자 실행).
+- **Click mode in Chromium apps:** Chromium can reject synthetic wheel input while it absorbs the click, so GazeScroll cannot reliably provide both click-through behavior and scrolling in this case. The primary dwell mode works normally.
+- **Elevated apps and protected surfaces:** Windows UIPI may block input sent from a non-elevated overlay. Run GazeScroll as Administrator when necessary.
 
 </details>
 
-## 개발
+## Development
 
 ```bash
 npm install
-npm run dev       # 개발 실행 (electron-vite dev)
-npx tsc --noEmit  # 타입체크 (게이트)
-npm run build     # 프로덕션 빌드
-npm run dist      # 배포 zip
+npm run dev       # Start electron-vite development mode
+npx tsc --noEmit  # Type-check
+npm run build     # Production build
+npm run dist      # Create the release ZIP
 ```
 
-## 라이선스 · 문의
+## License and contact
 
-MIT © 2026 BlinkLabs — 자유롭게 사용·수정·재배포 가능(저작권 고지 유지). 자세한 내용은 [LICENSE](./LICENSE).
-문의: tia_access@naver.com
+MIT © 2026 BlinkLabs. You may use, modify, and redistribute this project as long as the copyright notice is retained. See [LICENSE](LICENSE).
+
+Contact: tia_access@naver.com
