@@ -8,7 +8,9 @@
 [![许可证](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![界面语言](https://img.shields.io/badge/UI-7%20languages-1f6feb)](#主要功能)
 
-[English](README.md) · [한국어](README.ko.md) · **简体中文** · [日本語](README.ja.md)
+<p align="center">
+  <a href="README.md">[English]</a> · <a href="README.ko.md">[한국어]</a> · <strong>[简体中文]</strong> · <a href="README.ja.md">[日本語]</a>
+</p>
 
 ![GazeScroll 演示——将指针停在按钮上即可滚动下方应用](assets/hero.gif)
 

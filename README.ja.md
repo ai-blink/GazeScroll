@@ -8,7 +8,9 @@
 [![ライセンス](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![UI 言語](https://img.shields.io/badge/UI-7%20languages-1f6feb)](#主な機能)
 
-[English](README.md) · [한국어](README.ko.md) · [简体中文](README.zh-CN.md) · **日本語**
+<p align="center">
+  <a href="README.md">[English]</a> · <a href="README.ko.md">[한국어]</a> · <a href="README.zh-CN.md">[简体中文]</a> · <strong>[日本語]</strong>
+</p>
 
 ![GazeScroll のデモ — ボタンにポインターを乗せると背後のアプリがスクロールします](assets/hero.gif)
 

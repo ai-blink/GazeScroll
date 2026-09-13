@@ -8,7 +8,9 @@
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![Interface languages](https://img.shields.io/badge/UI-7%20languages-1f6feb)](#features)
 
-**English** · [한국어](README.ko.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
+<p align="center">
+  <strong>[English]</strong> · <a href="README.ko.md">[한국어]</a> · <a href="README.zh-CN.md">[简体中文]</a> · <a href="README.ja.md">[日本語]</a>
+</p>
 
 ![GazeScroll demo — hovering over a button scrolls the app underneath](assets/hero.gif)
 

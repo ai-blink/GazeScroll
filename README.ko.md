@@ -8,7 +8,9 @@
 [![라이선스](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![UI 언어](https://img.shields.io/badge/UI-7%20languages-1f6feb)](#주요-기능)
 
-[English](README.md) · **한국어** · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
+<p align="center">
+  <a href="README.md">[English]</a> · <strong>[한국어]</strong> · <a href="README.zh-CN.md">[简体中文]</a> · <a href="README.ja.md">[日本語]</a>
+</p>
 
 ![GazeScroll 데모 — 버튼에 커서를 올리면 아래 앱이 스크롤됩니다](assets/hero.gif)
 
