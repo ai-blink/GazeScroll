@@ -5,7 +5,6 @@
 > A lightweight, always-on-top remote for Windows 11, designed especially for eye tracking and other limited-input environments.
 
 [![Platform](https://img.shields.io/badge/Windows-11-0078D4)](#requirements)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![Interface languages](https://img.shields.io/badge/UI-7%20languages-1f6feb)](#features)
 
 <p align="center">
@@ -169,8 +168,12 @@ npm run build     # Production build
 npm run dist      # Create the release ZIP
 ```
 
-## License and contact
+## License
 
-MIT © 2026 BlinkLabs. You may use, modify, and redistribute this project as long as the copyright notice is retained. See [LICENSE](LICENSE).
+**Free for personal use only.** Individuals may use this software free of charge for personal, non-commercial purposes.
+
+Use by or on behalf of a company, organization or client, any commercial use, redistribution or sale, and modifying or publishing derivative works require the author's permission. Please email [ikseon@blinklabs.co.kr](mailto:ikseon@blinklabs.co.kr) to discuss. The source code is viewable for reference only.
+
+Copyright © 2026 Ikseon Jang (BlinkLabs). All rights reserved. See [LICENSE](LICENSE). Versions released under the MIT License before 2026-10-15 remain available under the terms they were received under.
 
 Contact: tia_access@naver.com

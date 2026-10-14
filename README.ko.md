@@ -5,7 +5,6 @@
 > 안구마우스와 제한된 입력 환경을 위해 설계한 Windows 11용 가볍고 항상 위에 표시되는 리모컨입니다.
 
 [![플랫폼](https://img.shields.io/badge/Windows-11-0078D4)](#요구-사항)
-[![라이선스](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![UI 언어](https://img.shields.io/badge/UI-7%20languages-1f6feb)](#주요-기능)
 
 <p align="center">
@@ -169,8 +168,12 @@ npm run build     # 프로덕션 빌드
 npm run dist      # 배포 ZIP 생성
 ```
 
-## 라이선스 및 문의
+## 라이선스
 
-MIT © 2026 BlinkLabs. 저작권 고지를 유지하는 한 자유롭게 사용, 수정, 재배포할 수 있습니다. 자세한 내용은 [LICENSE](LICENSE)를 참고하세요.
+**개인 사용 무료.** 개인이 비상업 목적으로 사용하는 것은 무료입니다.
+
+회사·단체·의뢰 업무에서의 사용, 상업적 이용, 재배포·판매, 수정본 제작·배포는 제작자의 허가가 필요합니다. [ikseon@blinklabs.co.kr](mailto:ikseon@blinklabs.co.kr)로 이메일 주시면 협의합니다. 소스 코드는 참고용으로만 볼 수 있습니다.
+
+Copyright © 2026 장익선(BlinkLabs). All rights reserved. 자세한 내용은 [LICENSE](LICENSE)(영문 원문이 우선)를 참고하세요. 2026-10-15 이전에 MIT License로 배포된 버전은 받은 당시의 조건 그대로 유지됩니다.
 
 문의: tia_access@naver.com

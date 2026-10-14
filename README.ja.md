@@ -5,7 +5,6 @@
 > 視線入力など、入力手段が限られた環境のために設計した、Windows 11 用の軽量な常時最前面スクロールリモコンです。
 
 [![プラットフォーム](https://img.shields.io/badge/Windows-11-0078D4)](#動作要件)
-[![ライセンス](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![UI 言語](https://img.shields.io/badge/UI-7%20languages-1f6feb)](#主な機能)
 
 <p align="center">
@@ -169,8 +168,12 @@ npm run build     # プロダクションビルド
 npm run dist      # リリース ZIP を作成
 ```
 
-## ライセンスとお問い合わせ
+## ライセンス
 
-MIT © 2026 BlinkLabs。著作権表示を保持する限り、本プロジェクトは自由に使用、変更、再配布できます。詳細は [LICENSE](LICENSE) を参照してください。
+**個人利用は無料です。** 個人が非商用目的で使用する場合は無料です。
+
+企業・団体・依頼業務での使用、商用利用、再配布・販売、改変物の作成・公開には作者の許可が必要です。[ikseon@blinklabs.co.kr](mailto:ikseon@blinklabs.co.kr) までメールでご相談ください。ソースコードは参考のために閲覧できます。
+
+Copyright © 2026 Ikseon Jang (BlinkLabs). All rights reserved. 詳細は [LICENSE](LICENSE)(英語の原文が優先)を参照してください。 2026-10-15 より前に MIT License で公開されたバージョンは、受け取った時点の条件のまま維持されます。
 
 お問い合わせ：tia_access@naver.com

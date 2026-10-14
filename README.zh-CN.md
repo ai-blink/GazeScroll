@@ -5,7 +5,6 @@
 > 这是一个轻量、始终置顶的 Windows 11 滚动遥控器，尤其适合眼动追踪和其他受限输入环境。
 
 [![平台](https://img.shields.io/badge/Windows-11-0078D4)](#系统要求)
-[![许可证](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![界面语言](https://img.shields.io/badge/UI-7%20languages-1f6feb)](#主要功能)
 
 <p align="center">
@@ -169,8 +168,12 @@ npm run build     # 生产构建
 npm run dist      # 创建发布 ZIP
 ```
 
-## 许可证与联系
+## 许可证
 
-MIT © 2026 BlinkLabs。只要保留版权声明，您可以自由使用、修改和再发布本项目。详见 [LICENSE](LICENSE)。
+**个人使用免费。** 个人出于非商业目的使用本软件免费。
+
+公司、组织或客户业务中的使用、任何商业用途、再分发或销售，以及修改或发布衍生作品，均需获得作者许可。请发送邮件至 [ikseon@blinklabs.co.kr](mailto:ikseon@blinklabs.co.kr) 协商。源代码仅供参考查看。
+
+Copyright © 2026 Ikseon Jang (BlinkLabs). All rights reserved. 详见 [LICENSE](LICENSE)(以英文原文为准)。 2026-10-15 之前以 MIT License 发布的版本，仍按收到时的条款有效。
 
 联系邮箱：tia_access@naver.com
